@@ -8,16 +8,22 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import FloatingActionButton from "@/components/FloatingActionButton";
 import { getImageUrl } from "@/sanity/imageUtils";
-import type { CafeInfo, SpecialOffer } from "@/sanity/api";
+import type { CafeInfo, SpecialOffer, Testimonial, BlogPost, GalleryItem } from "@/sanity/api";
 
 interface HomePageClientProps {
   cafeInfo: CafeInfo | null;
   specialOffers: SpecialOffer[];
+  testimonials: Testimonial[];
+  blogPosts: BlogPost[];
+  galleryItems: GalleryItem[];
 }
 
 export default function HomePageClient({ 
   cafeInfo, 
-  specialOffers
+  specialOffers,
+  testimonials,
+  blogPosts,
+  galleryItems
 }: HomePageClientProps) {
   // Fallback data if Sanity data is not available
   const defaultCafeInfo = {
@@ -298,10 +304,10 @@ export default function HomePageClient({
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-6">
+              <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
                 <span className="text-gradient">Special Offers</span>
               </h2>
-              <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
                 Don&apos;t miss out on our amazing deals and discounts
               </p>
             </motion.div>
@@ -310,7 +316,7 @@ export default function HomePageClient({
               {specialOffers.slice(0, 3).map((offer, index) => (
                 <motion.div
                   key={offer._id}
-                  className="bg-gradient-to-br from-amber-100 to-orange-200 dark:from-amber-900/20 dark:to-orange-900/20 p-8 rounded-2xl card-modern group"
+                  className="bg-muted p-8 rounded-2xl shadow-2xl group-hover:shadow-3xl transition-all duration-500 h-full group"
                   whileHover={{ y: -10, scale: 1.02 }}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -318,16 +324,29 @@ export default function HomePageClient({
                   viewport={{ once: true }}
                 >
                   <div className="text-center">
-                    <div className="w-16 h-16 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                      <Star className="w-8 h-8 text-white" />
+                    {/* Special Offer Image */}
+                    {offer.image && (
+                      <div className="mb-6">
+                        <Image
+                          src={getImageUrl(offer.image, 300, 200) || "/offers/placeholder.jpg"}
+                          alt={offer.title}
+                          width={300}
+                          height={200}
+                          className="w-full h-48 object-cover rounded-xl mx-auto shadow-lg"
+                        />
+                      </div>
+                    )}
+                    
+                    <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                      <Star className="w-8 h-8 text-primary-foreground" />
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-4 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                    <h3 className="text-2xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors">
                       {offer.title}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-300 mb-4 text-lg font-medium">
+                    <p className="text-muted-foreground mb-4 text-lg font-medium">
                       {offer.description}
                     </p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 font-semibold">
+                    <p className="text-sm text-muted-foreground/80 font-semibold">
                       Valid until {new Date(offer.validUntil || new Date()).toLocaleDateString()}
                     </p>
                   </div>
@@ -476,6 +495,273 @@ export default function HomePageClient({
         </div>
       </section>
 
+      {/* Testimonials Section */}
+      {testimonials && testimonials.length > 0 && (
+        <section className="py-20 relative">
+          <div className="container mx-auto px-6">
+            <motion.div 
+              className="text-center mb-16"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+                <span className="text-gradient">What Our Customers Say</span>
+              </h2>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                Hear from our happy customers about their experience at The Sip-In Cafe
+              </p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              {testimonials.slice(0, 6).map((testimonial, index) => (
+                <motion.div
+                  key={testimonial._id}
+                  className="bg-muted p-8 rounded-2xl shadow-2xl group-hover:shadow-3xl transition-all duration-500 h-full"
+                  whileHover={{ y: -5, scale: 1.02 }}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1, duration: 0.6, type: "spring", stiffness: 300 }}
+                  viewport={{ once: true }}
+                >
+                  <div className="text-center">
+                    {/* Customer Photo */}
+                    {testimonial.customerPhoto && (
+                      <div className="mb-6">
+                        <Image
+                          src={getImageUrl(testimonial.customerPhoto, 80, 80) || "/testimonials/placeholder.jpg"}
+                          alt={testimonial.customerName}
+                          width={80}
+                          height={80}
+                          className="w-20 h-20 rounded-full mx-auto object-cover shadow-lg"
+                        />
+                      </div>
+                    )}
+                    
+                    {/* Rating */}
+                    <div className="flex justify-center mb-4">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`w-5 h-5 ${
+                            i < testimonial.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    
+                    <p className="text-muted-foreground mb-6 italic leading-relaxed">
+                      "{testimonial.content}"
+                    </p>
+                    
+                    <div className="border-t border-border pt-4">
+                      <h4 className="font-bold text-foreground mb-1">{testimonial.customerName}</h4>
+                      {testimonial.customerLocation && (
+                        <p className="text-sm text-muted-foreground">{testimonial.customerLocation}</p>
+                      )}
+                      {testimonial.isVerified && (
+                        <span className="inline-block mt-2 px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
+                          Verified Customer
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Blog Posts Preview Section */}
+      {blogPosts && blogPosts.length > 0 && (
+        <section className="py-20 bg-muted/30">
+          <div className="container mx-auto px-6">
+            <motion.div 
+              className="text-center mb-16"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+                <span className="text-gradient">Latest News & Stories</span>
+              </h2>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                Stay updated with our latest news, coffee tips, and behind-the-scenes stories
+              </p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              {blogPosts.slice(0, 3).map((post, index) => (
+                <motion.article
+                  key={post._id}
+                  className="bg-background rounded-2xl shadow-2xl overflow-hidden group-hover:shadow-3xl transition-all duration-500 h-full"
+                  whileHover={{ y: -5, scale: 1.02 }}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1, duration: 0.6, type: "spring", stiffness: 300 }}
+                  viewport={{ once: true }}
+                >
+                  {/* Featured Image */}
+                  {post.featuredImage && (
+                    <div className="relative h-48 overflow-hidden">
+                      <Image
+                        src={getImageUrl(post.featuredImage, 400, 300) || "/blog/placeholder.jpg"}
+                        alt={post.title}
+                        width={400}
+                        height={300}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    </div>
+                  )}
+                  
+                  <div className="p-8">
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="px-3 py-1 bg-primary/10 text-primary text-sm font-semibold rounded-full">
+                        {post.category}
+                      </span>
+                      {post.readingTime && (
+                        <span className="text-sm text-muted-foreground">
+                          {post.readingTime} min read
+                        </span>
+                      )}
+                    </div>
+                    
+                    <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
+                      {post.title}
+                    </h3>
+                    
+                    {post.excerpt && (
+                      <p className="text-muted-foreground mb-4 line-clamp-3">
+                        {post.excerpt}
+                      </p>
+                    )}
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        {post.author?.photo && (
+                          <Image
+                            src={getImageUrl(post.author.photo, 32, 32) || "/authors/placeholder.jpg"}
+                            alt={post.author.name}
+                            width={32}
+                            height={32}
+                            className="w-8 h-8 rounded-full object-cover"
+                          />
+                        )}
+                        <div>
+                          <p className="text-sm font-semibold text-foreground">{post.author?.name || "The Sip-In Cafe"}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {new Date(post.publishedAt).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <Link
+                        href={`/blog/${post.slug.current}`}
+                        className="text-primary hover:text-primary/80 font-semibold flex items-center space-x-1 group"
+                      >
+                        <span>Read More</span>
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      </Link>
+                    </div>
+                  </div>
+                </motion.article>
+              ))}
+            </div>
+            
+            <motion.div 
+              className="text-center mt-12"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true }}
+            >
+              <Link 
+                href="/blog" 
+                className="inline-block bg-primary text-primary-foreground px-8 py-4 rounded-xl text-lg font-semibold hover:bg-primary/90 transition-colors shadow-lg"
+              >
+                View All Posts
+              </Link>
+            </motion.div>
+          </div>
+        </section>
+      )}
+
+      {/* Featured Gallery Section */}
+      {galleryItems && galleryItems.length > 0 && (
+        <section className="py-20 relative">
+          <div className="container mx-auto px-6">
+            <motion.div 
+              className="text-center mb-16"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+                <span className="text-gradient">Featured Moments</span>
+              </h2>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                A glimpse into our cafe life, delicious food, and happy moments
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
+              {galleryItems.slice(0, 8).map((item, index) => (
+                <motion.div
+                  key={item._id}
+                  className="relative group cursor-pointer"
+                  whileHover={{ scale: 1.05 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05, duration: 0.5 }}
+                  viewport={{ once: true }}
+                >
+                  <div className="relative aspect-square overflow-hidden rounded-xl">
+                    {item.image && (
+                      <Image
+                        src={getImageUrl(item.image, 300, 300) || "/gallery/placeholder.jpg"}
+                        alt={item.title}
+                        width={300}
+                        height={300}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    )}
+                    
+                    {/* Overlay */}
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <div className="text-center text-white">
+                        <h4 className="font-bold text-lg mb-1">{item.title}</h4>
+                        {item.category && (
+                          <p className="text-sm opacity-90 capitalize">{item.category}</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+            
+            <motion.div 
+              className="text-center mt-12"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true }}
+            >
+              <Link 
+                href="/gallery" 
+                className="inline-block bg-primary text-primary-foreground px-8 py-4 rounded-xl text-lg font-semibold hover:bg-primary/90 transition-colors shadow-lg"
+              >
+                View Full Gallery
+              </Link>
+            </motion.div>
+          </div>
+        </section>
+      )}
+
       {/* Social Media */}
       <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-6 text-center">
@@ -519,7 +805,7 @@ export default function HomePageClient({
               </a>
             )}
           </div>
-          <p className="text-gray-600 mt-8 text-lg">
+          <p className="text-muted-foreground mt-8 text-lg">
             Stay updated with our latest news, special offers, and behind-the-scenes content!
           </p>
         </div>
@@ -542,7 +828,7 @@ export default function HomePageClient({
       </section>
 
       {/* Footer */}
-      <Footer />
+      <Footer cafeInfo={cafeInfo} />
 
       {/* Floating Action Button */}
       <FloatingActionButton />

@@ -1,21 +1,62 @@
 'use client';
 
 import { motion } from "framer-motion";
-import { MapPin, Phone, Mail, Instagram, Facebook } from "lucide-react";
+import { MapPin, Phone, Mail, Instagram, Facebook, MessageCircle } from "lucide-react";
+import type { CafeInfo } from "@/sanity/api";
 
-export default function Footer() {
+interface FooterProps {
+  cafeInfo?: CafeInfo | null;
+}
+
+export default function Footer({ cafeInfo }: FooterProps) {
+  // Fallback data if CMS data is not available
+  const defaultCafeInfo = {
+    address: {
+      street: "20 Kemble Gallery",
+      city: "Leicester",
+      postcode: "LE1 3YT",
+      country: "United Kingdom"
+    },
+    contact: {
+      phone: "0116 123 4567",
+      email: "hello@thesipincafe.co.uk"
+    },
+    openingHours: [
+      { day: "monday", isOpen: true, openTime: "07:00", closeTime: "18:00" },
+      { day: "tuesday", isOpen: true, openTime: "07:00", closeTime: "18:00" },
+      { day: "wednesday", isOpen: true, openTime: "07:00", closeTime: "18:00" },
+      { day: "thursday", isOpen: true, openTime: "07:00", closeTime: "18:00" },
+      { day: "friday", isOpen: true, openTime: "07:00", closeTime: "18:00" },
+      { day: "saturday", isOpen: true, openTime: "08:00", closeTime: "19:00" },
+      { day: "sunday", isOpen: true, openTime: "08:00", closeTime: "19:00" }
+    ],
+    socialMedia: {
+      instagram: "https://instagram.com/thesipincafe",
+      facebook: "https://facebook.com/thesipincafe",
+      tiktok: "https://tiktok.com/@thesipincafe"
+    }
+  };
+
+  const cafe = cafeInfo || defaultCafeInfo;
+
   const socialLinks = [
     {
       name: "Instagram",
-      href: "https://instagram.com/thesipincafe",
+      href: cafe.socialMedia?.instagram || "https://instagram.com/thesipincafe",
       icon: Instagram,
       color: "hover:text-pink-500"
     },
     {
       name: "Facebook", 
-      href: "https://facebook.com/thesipincafe",
+      href: cafe.socialMedia?.facebook || "https://facebook.com/thesipincafe",
       icon: Facebook,
       color: "hover:text-blue-500"
+    },
+    {
+      name: "TikTok", 
+      href: cafe.socialMedia?.tiktok || "https://tiktok.com/@thesipincafe",
+      icon: MessageCircle,
+      color: "hover:text-black"
     }
   ];
 
@@ -77,29 +118,29 @@ export default function Footer() {
               >
                 <MapPin className="w-6 h-6 text-primary group-hover:text-accent transition-colors duration-300" />
                 <div>
-                  <p className="text-neutral-300 text-body">20 Kemble Gallery</p>
-                  <p className="text-neutral-300 text-body">Leicester LE1 3YT</p>
+                  <p className="text-neutral-300 text-body">{cafe.address?.street || "20 Kemble Gallery"}</p>
+                  <p className="text-neutral-300 text-body">{cafe.address?.city || "Leicester"} {cafe.address?.postcode || "LE1 3YT"}</p>
                 </div>
               </motion.div>
               
               <motion.a
-                href="tel:01161234567"
+                href={`tel:${cafe.contact?.phone || "01161234567"}`}
                 className="flex items-center space-x-3 group"
                 whileHover={{ x: 5 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
                 <Phone className="w-6 h-6 text-primary group-hover:text-accent transition-colors duration-300" />
-                <span className="text-neutral-300 group-hover:text-white transition-colors duration-300 text-body">0116 123 4567</span>
+                <span className="text-neutral-300 group-hover:text-white transition-colors duration-300 text-body">{cafe.contact?.phone || "0116 123 4567"}</span>
               </motion.a>
               
               <motion.a
-                href="mailto:hello@thesipincafe.co.uk"
+                href={`mailto:${cafe.contact?.email || "hello@thesipincafe.co.uk"}`}
                 className="flex items-center space-x-3 group"
                 whileHover={{ x: 5 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
                 <Mail className="w-6 h-6 text-primary group-hover:text-accent transition-colors duration-300" />
-                <span className="text-neutral-300 group-hover:text-white transition-colors duration-300 text-body">hello@thesipincafe.co.uk</span>
+                <span className="text-neutral-300 group-hover:text-white transition-colors duration-300 text-body">{cafe.contact?.email || "hello@thesipincafe.co.uk"}</span>
               </motion.a>
             </div>
           </motion.div>
@@ -113,32 +154,50 @@ export default function Footer() {
           >
             <h4 className="text-2xl font-heading font-semibold mb-6 text-primary">Opening Hours</h4>
             <div className="space-y-3">
-              <motion.div 
-                className="flex justify-between items-center py-3 border-b border-neutral-700"
-                whileHover={{ x: 5 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                <span className="text-neutral-300 text-body">Monday - Friday</span>
-                <span className="text-primary font-semibold">7:00 AM - 6:00 PM</span>
-              </motion.div>
-              
-              <motion.div 
-                className="flex justify-between items-center py-3 border-b border-neutral-700"
-                whileHover={{ x: 5 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                <span className="text-neutral-300 text-body">Saturday</span>
-                <span className="text-primary font-semibold">8:00 AM - 7:00 PM</span>
-              </motion.div>
-              
-              <motion.div 
-                className="flex justify-between items-center py-2"
-                whileHover={{ x: 5 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                <span className="text-neutral-300 text-body">Sunday</span>
-                <span className="text-primary font-semibold">8:00 AM - 7:00 PM</span>
-              </motion.div>
+              {cafe.openingHours && cafe.openingHours.length > 0 ? (
+                cafe.openingHours.map((hours, index) => (
+                  <motion.div 
+                    key={hours.day}
+                    className={`flex justify-between items-center py-3 ${index < cafe.openingHours!.length - 1 ? 'border-b border-neutral-700' : ''}`}
+                    whileHover={{ x: 5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <span className="text-neutral-300 text-body capitalize">{hours.day}</span>
+                    <span className="text-primary font-semibold">
+                      {hours.isOpen ? `${hours.openTime} - ${hours.closeTime}` : "Closed"}
+                    </span>
+                  </motion.div>
+                ))
+              ) : (
+                <>
+                  <motion.div 
+                    className="flex justify-between items-center py-3 border-b border-neutral-700"
+                    whileHover={{ x: 5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <span className="text-neutral-300 text-body">Monday - Friday</span>
+                    <span className="text-primary font-semibold">7:00 AM - 6:00 PM</span>
+                  </motion.div>
+                  
+                  <motion.div 
+                    className="flex justify-between items-center py-3 border-b border-neutral-700"
+                    whileHover={{ x: 5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <span className="text-neutral-300 text-body">Saturday</span>
+                    <span className="text-primary font-semibold">8:00 AM - 7:00 PM</span>
+                  </motion.div>
+                  
+                  <motion.div 
+                    className="flex justify-between items-center py-2"
+                    whileHover={{ x: 5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <span className="text-neutral-300 text-body">Sunday</span>
+                    <span className="text-primary font-semibold">8:00 AM - 7:00 PM</span>
+                  </motion.div>
+                </>
+              )}
             </div>
           </motion.div>
         </div>

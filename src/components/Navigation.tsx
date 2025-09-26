@@ -18,7 +18,7 @@ export default function Navigation({ currentPage = "" }: NavigationProps) {
     { href: "/menu", label: "Menu", id: "menu" },
     { href: "/#order", label: "Order", id: "order" },
     { href: "/gallery", label: "Gallery", id: "gallery" },
-    { href: "/#contact", label: "Contact", id: "contact" }
+    { href: "/contact", label: "Contact", id: "contact" }
   ];
 
   return (

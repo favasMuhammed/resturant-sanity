@@ -9,13 +9,14 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import FloatingActionButton from "@/components/FloatingActionButton";
 import { getImageUrl } from "@/sanity/imageUtils";
-import type { GalleryItem } from "@/sanity/api";
+import type { GalleryItem, CafeInfo } from "@/sanity/api";
 
 interface GalleryPageClientProps {
   galleryItems: GalleryItem[];
+  cafeInfo: CafeInfo | null;
 }
 
-export default function GalleryPageClient({ galleryItems }: GalleryPageClientProps) {
+export default function GalleryPageClient({ galleryItems, cafeInfo }: GalleryPageClientProps) {
   const [activeFilter, setActiveFilter] = useState("all");
 
   // Fallback gallery data if Sanity data is not available
@@ -358,7 +359,7 @@ export default function GalleryPageClient({ galleryItems }: GalleryPageClientPro
       </section>
 
       {/* Footer */}
-      <Footer />
+      <Footer cafeInfo={cafeInfo} />
 
       {/* Floating Action Button */}
       <FloatingActionButton />

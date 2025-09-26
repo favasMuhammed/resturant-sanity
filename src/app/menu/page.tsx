@@ -1,12 +1,13 @@
-import { getMenuCategories, getMenuItems, getActiveSpecialOffers } from "@/sanity/api";
+import { getMenuCategories, getMenuItems, getActiveSpecialOffers, getCafeInfo } from "@/sanity/api";
 import MenuPageClient from "@/components/MenuPageClient";
 
 export default async function MenuPage() {
   // Fetch data from Sanity
-  const [menuCategories, menuItems, specialOffers] = await Promise.all([
+  const [menuCategories, menuItems, specialOffers, cafeInfo] = await Promise.all([
     getMenuCategories(),
     getMenuItems(),
-    getActiveSpecialOffers()
+    getActiveSpecialOffers(),
+    getCafeInfo()
   ]);
 
   return (
@@ -14,6 +15,7 @@ export default async function MenuPage() {
       menuCategories={menuCategories}
       menuItems={menuItems}
       specialOffers={specialOffers}
+      cafeInfo={cafeInfo}
     />
   );
 }

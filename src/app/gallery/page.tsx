@@ -1,13 +1,17 @@
-import { getGalleryItems } from "@/sanity/api";
+import { getGalleryItems, getCafeInfo } from "@/sanity/api";
 import GalleryPageClient from "@/components/GalleryPageClient";
 
 export default async function GalleryPage() {
   // Fetch data from Sanity
-  const galleryItems = await getGalleryItems();
+  const [galleryItems, cafeInfo] = await Promise.all([
+    getGalleryItems(),
+    getCafeInfo()
+  ]);
 
   return (
     <GalleryPageClient 
       galleryItems={galleryItems}
+      cafeInfo={cafeInfo}
     />
   );
 }

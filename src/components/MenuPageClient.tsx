@@ -1,23 +1,27 @@
 'use client';
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight, Star, Coffee, Utensils, Clock, Percent } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import FloatingActionButton from "@/components/FloatingActionButton";
-import type { MenuCategory, MenuItem, SpecialOffer } from "@/sanity/api";
+import { getImageUrl } from "@/sanity/imageUtils";
+import type { MenuCategory, MenuItem, SpecialOffer, CafeInfo } from "@/sanity/api";
 
 interface MenuPageClientProps {
   menuCategories: MenuCategory[];
   menuItems: MenuItem[];
   specialOffers: SpecialOffer[];
+  cafeInfo: CafeInfo | null;
 }
 
 export default function MenuPageClient({ 
   menuCategories, 
   menuItems, 
-  specialOffers 
+  specialOffers,
+  cafeInfo
 }: MenuPageClientProps) {
   // Group menu items by category
   const groupedMenuItems = menuCategories.map(category => ({
@@ -89,7 +93,7 @@ export default function MenuPageClient({
       <Navigation currentPage="menu" />
 
       {/* Modern Menu Header */}
-      <section className="relative py-20 px-6 pt-24">
+      <section className="relative py-20 px-6 pt-32">
         <div className="container mx-auto text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -141,6 +145,19 @@ export default function MenuPageClient({
               transition={{ duration: 0.6, delay: categoryIndex * 0.1 }}
               viewport={{ once: true }}
             >
+              {/* Category Image */}
+              {'image' in category && category.image && (
+                <div className="mb-8 text-center">
+                  <Image
+                    src={getImageUrl(category.image, 400, 200) || "/menu/category-placeholder.jpg"}
+                    alt={category.name || category.title}
+                    width={400}
+                    height={200}
+                    className="w-full max-w-2xl h-48 object-cover rounded-2xl mx-auto shadow-lg"
+                  />
+                </div>
+              )}
+              
               <motion.h2 
                 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-12 text-center"
                 whileInView={{ scale: 1.05 }}
@@ -151,6 +168,13 @@ export default function MenuPageClient({
                   {'name' in category ? category.name : category.title}
                 </span>
               </motion.h2>
+              
+              {/* Category Description */}
+              {'description' in category && category.description && (
+                <p className="text-center text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
+                  {category.description}
+                </p>
+              )}
               <div className="grid md:grid-cols-2 gap-6">
                 {(category.items || []).map((item, itemIndex) => (
                   <motion.div 
@@ -162,6 +186,19 @@ export default function MenuPageClient({
                     transition={{ delay: itemIndex * 0.05, duration: 0.5, type: "spring", stiffness: 300 }}
                     viewport={{ once: true }}
                   >
+                    {/* Menu Item Image */}
+                    {'image' in item && item.image && (
+                      <div className="mb-4">
+                        <Image
+                          src={getImageUrl(item.image, 300, 200) || "/menu/placeholder.jpg"}
+                          alt={item.name}
+                          width={300}
+                          height={200}
+                          className="w-full h-48 object-cover rounded-xl"
+                        />
+                      </div>
+                    )}
+                    
                     <div className="flex justify-between items-start mb-3">
                       <h3 className="text-xl font-bold text-gray-800 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
                         {item.name}
@@ -245,6 +282,19 @@ export default function MenuPageClient({
                   viewport={{ once: true }}
                 >
                   <div className="text-center">
+                    {/* Special Offer Image */}
+                    {offer.image && (
+                      <div className="mb-6">
+                        <Image
+                          src={getImageUrl(offer.image, 300, 200) || "/offers/placeholder.jpg"}
+                          alt={offer.title}
+                          width={300}
+                          height={200}
+                          className="w-full h-48 object-cover rounded-xl mx-auto shadow-lg"
+                        />
+                      </div>
+                    )}
+                    
                     <div className="w-16 h-16 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                       <Percent className="w-8 h-8 text-white" />
                     </div>
@@ -379,7 +429,7 @@ export default function MenuPageClient({
       </section>
 
       {/* Footer */}
-      <Footer />
+      <Footer cafeInfo={cafeInfo} />
 
       {/* Floating Action Button */}
       <FloatingActionButton />

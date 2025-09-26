@@ -3,8 +3,37 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import FloatingActionButton from "@/components/FloatingActionButton";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { getCafeInfo } from "@/sanity/api";
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  // Fetch cafe info from Sanity
+  const cafeInfo = await getCafeInfo();
+  
+  // Fallback data if CMS data is not available
+  const defaultCafeInfo = {
+    address: {
+      street: "20 Kemble Gallery",
+      city: "Leicester",
+      postcode: "LE1 3YT",
+      country: "United Kingdom"
+    },
+    contact: {
+      phone: "0116 123 4567",
+      email: "hello@thesipincafe.co.uk"
+    },
+    openingHours: [
+      { day: "monday", isOpen: true, openTime: "07:00", closeTime: "18:00" },
+      { day: "tuesday", isOpen: true, openTime: "07:00", closeTime: "18:00" },
+      { day: "wednesday", isOpen: true, openTime: "07:00", closeTime: "18:00" },
+      { day: "thursday", isOpen: true, openTime: "07:00", closeTime: "18:00" },
+      { day: "friday", isOpen: true, openTime: "07:00", closeTime: "18:00" },
+      { day: "saturday", isOpen: true, openTime: "08:00", closeTime: "19:00" },
+      { day: "sunday", isOpen: true, openTime: "08:00", closeTime: "19:00" }
+    ]
+  };
+
+  const cafe = cafeInfo || defaultCafeInfo;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-cream-50 via-cream-100 to-coffee-100 dark:from-coffee-900 dark:via-coffee-800 dark:to-coffee-900">
       <Navigation currentPage="contact" />
@@ -37,9 +66,9 @@ export default function ContactPage() {
                       <div>
                         <h3 className="font-semibold text-lg mb-1">Address</h3>
                         <p className="text-neutral-600 dark:text-neutral-300">
-                          20 Kemble Gallery<br />
-                          Leicester LE1 3YT<br />
-                          United Kingdom
+                          {cafe.address?.street || "20 Kemble Gallery"}<br />
+                          {cafe.address?.city || "Leicester"} {cafe.address?.postcode || "LE1 3YT"}<br />
+                          {cafe.address?.country || "United Kingdom"}
                         </p>
                       </div>
                     </div>
@@ -51,8 +80,8 @@ export default function ContactPage() {
                       <div>
                         <h3 className="font-semibold text-lg mb-1">Phone</h3>
                         <p className="text-neutral-600 dark:text-neutral-300">
-                          <a href="tel:01161234567" className="hover:text-primary transition-colors">
-                            0116 123 4567
+                          <a href={`tel:${cafe.contact?.phone || "01161234567"}`} className="hover:text-primary transition-colors">
+                            {cafe.contact?.phone || "0116 123 4567"}
                           </a>
                         </p>
                       </div>
@@ -65,8 +94,8 @@ export default function ContactPage() {
                       <div>
                         <h3 className="font-semibold text-lg mb-1">Email</h3>
                         <p className="text-neutral-600 dark:text-neutral-300">
-                          <a href="mailto:hello@thesipincafe.co.uk" className="hover:text-primary transition-colors">
-                            hello@thesipincafe.co.uk
+                          <a href={`mailto:${cafe.contact?.email || "hello@thesipincafe.co.uk"}`} className="hover:text-primary transition-colors">
+                            {cafe.contact?.email || "hello@thesipincafe.co.uk"}
                           </a>
                         </p>
                       </div>
@@ -79,9 +108,19 @@ export default function ContactPage() {
                       <div>
                         <h3 className="font-semibold text-lg mb-1">Opening Hours</h3>
                         <div className="text-neutral-600 dark:text-neutral-300 space-y-1">
-                          <p>Monday - Friday: 7:00 AM - 6:00 PM</p>
-                          <p>Saturday: 8:00 AM - 7:00 PM</p>
-                          <p>Sunday: 8:00 AM - 7:00 PM</p>
+                          {cafe.openingHours && cafe.openingHours.length > 0 ? (
+                            cafe.openingHours.map((hours, index) => (
+                              <p key={hours.day}>
+                                <span className="capitalize">{hours.day}</span>: {hours.isOpen ? `${hours.openTime} - ${hours.closeTime}` : "Closed"}
+                              </p>
+                            ))
+                          ) : (
+                            <>
+                              <p>Monday - Friday: 7:00 AM - 6:00 PM</p>
+                              <p>Saturday: 8:00 AM - 7:00 PM</p>
+                              <p>Sunday: 8:00 AM - 7:00 PM</p>
+                            </>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -173,7 +212,7 @@ export default function ContactPage() {
         </section>
       </main>
 
-      <Footer />
+      <Footer cafeInfo={cafeInfo} />
       <FloatingActionButton />
     </div>
   );
