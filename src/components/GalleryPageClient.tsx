@@ -107,12 +107,9 @@ export default function GalleryPageClient({ galleryItems, cafeInfo }: GalleryPag
     : processedImages.filter(img => img.category === activeFilter);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 relative overflow-hidden">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-amber-200/30 to-orange-200/30 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-yellow-200/30 to-amber-200/30 rounded-full blur-3xl animate-float" style={{animationDelay: '2s'}}></div>
-      </div>
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      {/* Dark luxury background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-muted to-background"></div>
 
       {/* Navigation */}
       <Navigation currentPage="gallery" />

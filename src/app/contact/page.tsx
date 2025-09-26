@@ -35,10 +35,12 @@ export default async function ContactPage() {
   const cafe = cafeInfo || defaultCafeInfo;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cream-50 via-cream-100 to-coffee-100 dark:from-coffee-900 dark:via-coffee-800 dark:to-coffee-900">
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      {/* Dark luxury background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-muted to-background"></div>
       <Navigation currentPage="contact" />
       
-      <main className="pt-20">
+      <main className="pt-20 relative z-10">
         {/* Hero Section */}
         <section className="py-20 px-6">
           <div className="container mx-auto max-w-6xl">
