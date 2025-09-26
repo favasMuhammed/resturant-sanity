@@ -358,7 +358,7 @@ export default function HomePageClient({
       )}
 
       {/* Modern Order & Booking Section */}
-      <section id="order" className="py-20 relative">
+      <section id="order" className="py-20 relative pt-32">
         <div className="container mx-auto px-6">
           <motion.div 
             className="text-center mb-16"
