@@ -90,7 +90,7 @@ export default function MenuPageClient({
       <Navigation currentPage="menu" />
 
       {/* Modern Menu Header */}
-      <section className="relative py-20 px-6 pt-32">
+      <section className="relative py-20 px-6 pt-24 md:pt-32">
         <div className="container mx-auto text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}

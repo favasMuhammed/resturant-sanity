@@ -65,7 +65,7 @@ export default function HomePageClient({
       <Navigation currentPage="home" />
 
       {/* Hero Section */}
-      <section id="home" className="relative min-h-screen flex items-center justify-center px-6 pt-20">
+      <section id="home" className="relative min-h-screen flex items-center justify-center px-6 pt-24 md:pt-20">
         <div className="container mx-auto text-center relative z-10">
           <motion.div 
             className="max-w-6xl mx-auto"
@@ -358,7 +358,7 @@ export default function HomePageClient({
       )}
 
       {/* Modern Order & Booking Section */}
-      <section id="order" className="py-20 relative pt-32">
+      <section id="order" className="py-20 relative pt-24 md:pt-32">
         <div className="container mx-auto px-6">
           <motion.div 
             className="text-center mb-16"

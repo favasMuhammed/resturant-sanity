@@ -40,7 +40,7 @@ export default async function ContactPage() {
       <div className="absolute inset-0 bg-gradient-to-br from-background via-muted to-background"></div>
       <Navigation currentPage="contact" />
       
-      <main className="pt-20 relative z-10">
+      <main className="pt-24 md:pt-20 relative z-10">
         {/* Hero Section */}
         <section className="py-20 px-6">
           <div className="container mx-auto max-w-6xl">
