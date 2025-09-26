@@ -1,0 +1,63 @@
+/* Custom Font Loading for Prachason Neue Mono */
+/* Place the actual font files in public/fonts/ directory */
+
+@font-face {
+  font-family: 'Prachason Neue Mono';
+  src: url('/fonts/PrachasonNeueMono-Regular.woff2') format('woff2'),
+       url('/fonts/PrachasonNeueMono-Regular.woff') format('woff'),
+       url('/fonts/PrachasonNeueMono-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Prachason Neue Mono';
+  src: url('/fonts/PrachasonNeueMono-Medium.woff2') format('woff2'),
+       url('/fonts/PrachasonNeueMono-Medium.woff') format('woff'),
+       url('/fonts/PrachasonNeueMono-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Prachason Neue Mono';
+  src: url('/fonts/PrachasonNeueMono-SemiBold.woff2') format('woff2'),
+       url('/fonts/PrachasonNeueMono-SemiBold.woff') format('woff'),
+       url('/fonts/PrachasonNeueMono-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Prachason Neue Mono';
+  src: url('/fonts/PrachasonNeueMono-Bold.woff2') format('woff2'),
+       url('/fonts/PrachasonNeueMono-Bold.woff') format('woff'),
+       url('/fonts/PrachasonNeueMono-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Logo text styles with Prachason Neue Mono (when font files are available) */
+.logo-name-prachason {
+  font-family: 'Prachason Neue Mono', 'Space Mono', 'IBM Plex Mono', 'JetBrains Mono', monospace;
+  font-size: 54.2px;
+  font-weight: 700;
+  color: #3f1f01; /* Color plate number */
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.logo-cafe-prachason {
+  font-family: 'Prachason Neue Mono', 'Space Mono', 'IBM Plex Mono', 'JetBrains Mono', monospace;
+  font-size: 20px;
+  font-weight: 600;
+  color: #95a386; /* Overall logo color */
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
