@@ -150,7 +150,7 @@ export default function MenuPageClient({
                 <div className="mb-8 text-center">
                   <Image
                     src={getImageUrl(category.image, 400, 200) || "/menu/category-placeholder.jpg"}
-                    alt={category.name || category.title}
+                    alt={category.name}
                     width={400}
                     height={200}
                     className="w-full max-w-2xl h-48 object-cover rounded-2xl mx-auto shadow-lg"

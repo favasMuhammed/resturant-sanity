@@ -552,7 +552,7 @@ export default function HomePageClient({
                     </div>
                     
                     <p className="text-muted-foreground mb-6 italic leading-relaxed">
-                      "{testimonial.content}"
+                      &ldquo;{testimonial.content}&rdquo;
                     </p>
                     
                     <div className="border-t border-border pt-4">

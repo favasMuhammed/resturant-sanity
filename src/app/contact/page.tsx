@@ -109,7 +109,7 @@ export default async function ContactPage() {
                         <h3 className="font-semibold text-lg mb-1">Opening Hours</h3>
                         <div className="text-neutral-600 dark:text-neutral-300 space-y-1">
                           {cafe.openingHours && cafe.openingHours.length > 0 ? (
-                            cafe.openingHours.map((hours, index) => (
+                            cafe.openingHours.map((hours) => (
                               <p key={hours.day}>
                                 <span className="capitalize">{hours.day}</span>: {hours.isOpen ? `${hours.openTime} - ${hours.closeTime}` : "Closed"}
                               </p>
