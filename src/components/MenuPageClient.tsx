@@ -143,7 +143,7 @@ export default function MenuPageClient({
               viewport={{ once: true }}
             >
               {/* Category Image */}
-              {'image' in category && category.image && (
+              {'image' in category && category.image && category.image.asset && (
                 <div className="mb-8 text-center">
                   <Image
                     src={getImageUrl(category.image, 400, 200) || "/menu/category-placeholder.jpg"}
@@ -184,7 +184,7 @@ export default function MenuPageClient({
                     viewport={{ once: true }}
                   >
                     {/* Menu Item Image */}
-                    {'image' in item && item.image && (
+                    {'image' in item && item.image && item.image.asset && (
                       <div className="mb-4">
                         <Image
                           src={getImageUrl(item.image, 300, 200) || "/menu/placeholder.jpg"}

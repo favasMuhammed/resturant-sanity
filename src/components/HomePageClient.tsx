@@ -83,7 +83,7 @@ export default function HomePageClient({
               <div className="relative inline-block">
                 <div className="relative p-8 bg-white rounded-2xl shadow-2xl">
                   <div className="relative z-10">
-                    {cafe.logo ? (
+                    {cafe.logo && cafe.logo.asset ? (
                       <Image
                         src={getImageUrl(cafe.logo, 200, 200) || "/logo.png"}
                         alt={`${cafe.name} Logo`}
@@ -325,7 +325,7 @@ export default function HomePageClient({
                 >
                   <div className="text-center">
                     {/* Special Offer Image */}
-                    {offer.image && (
+                    {offer.image && offer.image.asset && (
                       <div className="mb-6">
                         <Image
                           src={getImageUrl(offer.image, 300, 200) || "/offers/placeholder.jpg"}
@@ -527,7 +527,7 @@ export default function HomePageClient({
                 >
                   <div className="text-center">
                     {/* Customer Photo */}
-                    {testimonial.customerPhoto && (
+                    {testimonial.customerPhoto && testimonial.customerPhoto.asset && (
                       <div className="mb-6">
                         <Image
                           src={getImageUrl(testimonial.customerPhoto, 80, 80) || "/testimonials/placeholder.jpg"}
@@ -605,7 +605,7 @@ export default function HomePageClient({
                   viewport={{ once: true }}
                 >
                   {/* Featured Image */}
-                  {post.featuredImage && (
+                  {post.featuredImage && post.featuredImage.asset && (
                     <div className="relative h-48 overflow-hidden">
                       <Image
                         src={getImageUrl(post.featuredImage, 400, 300) || "/blog/placeholder.jpg"}
@@ -641,7 +641,7 @@ export default function HomePageClient({
                     
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
-                        {post.author?.photo && (
+                        {post.author?.photo && post.author.photo.asset && (
                           <Image
                             src={getImageUrl(post.author.photo, 32, 32) || "/authors/placeholder.jpg"}
                             alt={post.author.name}
@@ -720,7 +720,7 @@ export default function HomePageClient({
                   viewport={{ once: true }}
                 >
                   <div className="relative aspect-square overflow-hidden rounded-xl">
-                    {item.image && (
+                    {item.image && item.image.asset && (
                       <Image
                         src={getImageUrl(item.image, 300, 300) || "/gallery/placeholder.jpg"}
                         alt={item.title}
