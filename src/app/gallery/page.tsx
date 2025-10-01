@@ -1,5 +1,12 @@
 import { getGalleryItems, getCafeInfo } from "@/sanity/api";
 import GalleryPageClient from "@/components/GalleryPageClient";
+import { generateMetadata as generatePageMetadata } from "@/lib/metadata";
+import type { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const cafeInfo = await getCafeInfo();
+  return generatePageMetadata(cafeInfo, "Gallery");
+}
 
 export default async function GalleryPage() {
   // Fetch data from Sanity
@@ -7,6 +14,7 @@ export default async function GalleryPage() {
     getGalleryItems(),
     getCafeInfo()
   ]);
+
 
   return (
     <GalleryPageClient 

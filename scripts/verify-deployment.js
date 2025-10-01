@@ -95,3 +95,4 @@ console.log('2. Connect GitHub account');
 console.log('3. Import: favasMuhammed/resturant-sanity');
 console.log('4. Deploy!');
 console.log('\nYour The Sip-In Café website will be live in 2 minutes! ☕️✨');
+

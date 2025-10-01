@@ -68,6 +68,43 @@ export interface CafeInfo {
     justEat?: string
   }
   features?: string[]
+  seo?: {
+    metaTitle?: string
+    metaDescription?: string
+    keywords?: string[]
+    ogTitle?: string
+    ogDescription?: string
+    ogImage?: {
+      _type: 'image'
+      asset: {
+        _ref: string
+        _type: 'reference'
+      }
+    }
+    twitterTitle?: string
+    twitterDescription?: string
+    twitterImage?: {
+      _type: 'image'
+      asset: {
+        _ref: string
+        _type: 'reference'
+      }
+    }
+  }
+  favicon?: {
+    _type: 'image'
+    asset: {
+      _ref: string
+      _type: 'reference'
+    }
+  }
+  appleTouchIcon?: {
+    _type: 'image'
+    asset: {
+      _ref: string
+      _type: 'reference'
+    }
+  }
 }
 
 export interface MenuCategory {

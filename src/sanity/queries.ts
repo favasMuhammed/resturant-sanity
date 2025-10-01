@@ -11,7 +11,10 @@ export const CAFE_INFO_QUERY = `*[_type == "cafeInfo"][0]{
   openingHours,
   socialMedia,
   deliveryPlatforms,
-  features
+  features,
+  seo,
+  favicon,
+  appleTouchIcon
 }`
 
 // Menu Queries

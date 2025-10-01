@@ -5,12 +5,24 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { getImageUrl } from "@/sanity/imageUtils";
+import ThemeToggle from "./ThemeToggle";
 
 interface NavigationProps {
   currentPage?: string;
+  hasBlogPosts?: boolean;
+  cafeInfo?: {
+    logo?: {
+      _type: 'image';
+      asset: {
+        _ref: string;
+        _type: 'reference';
+      };
+    };
+  } | null;
 }
 
-export default function Navigation({ currentPage = "" }: NavigationProps) {
+export default function Navigation({ currentPage = "", hasBlogPosts = false, cafeInfo }: NavigationProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navItems = [
@@ -18,12 +30,20 @@ export default function Navigation({ currentPage = "" }: NavigationProps) {
     { href: "/menu", label: "Menu", id: "menu" },
     { href: "/#order", label: "Order", id: "order" },
     { href: "/gallery", label: "Gallery", id: "gallery" },
+    ...(hasBlogPosts ? [{ href: "/blog", label: "Blog", id: "blog" }] : []),
     { href: "/contact", label: "Contact", id: "contact" }
   ];
 
+  // Helper function to determine if a nav item is active
+  const isActive = (item: typeof navItems[0]) => {
+    if (currentPage === item.id) return true;
+    if (item.href === "/" && (currentPage === "" || currentPage === "home")) return true;
+    return false;
+  };
+
   return (
                 <motion.nav 
-                  initial={{ y: -100, opacity: 0 }}
+                  initial={false}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ duration: 0.6, ease: "easeOut" }}
                   className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-primary/10"
@@ -39,10 +59,11 @@ export default function Navigation({ currentPage = "" }: NavigationProps) {
                             <div className="relative">
                               <div className="p-3 bg-muted/80 backdrop-blur-sm rounded-xl shadow-lg border border-primary/10">
                                 <Image
-                                  src="/logo.png"
+                                  src={cafeInfo?.logo && cafeInfo.logo.asset ? getImageUrl(cafeInfo.logo, 48, 48) || "/logo-new.svg" : "/logo-new.svg"}
                                   alt="The Sip-In Cafe Logo"
                                   width={48}
                                   height={48}
+                                  priority
                                   className="rounded-lg transition-all duration-300 group-hover:scale-105"
                                 />
                               </div>
@@ -59,14 +80,14 @@ export default function Navigation({ currentPage = "" }: NavigationProps) {
                     {navItems.map((item, index) => (
                       <motion.div
                         key={item.label}
-                        initial={{ opacity: 0, y: -20 }}
+                        initial={false}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.1, duration: 0.5 }}
                       >
                               <Link 
                                 href={item.href}
                                 className={`relative px-5 py-2 rounded-lg transition-all duration-300 ease-out font-medium ${
-                                  currentPage === item.id 
+                                  isActive(item)
                                     ? 'text-primary bg-primary/10' 
                                     : 'text-foreground hover:text-primary hover:bg-primary/5'
                                 }`}
@@ -77,25 +98,32 @@ export default function Navigation({ currentPage = "" }: NavigationProps) {
                     ))}
                   </div>
 
-                  {/* Mobile Menu Button */}
-                  <div className="md:hidden flex items-center">
-                          <button
-                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            className="p-2 rounded-lg bg-muted/80 backdrop-blur-sm border border-primary/20 hover:bg-muted transition-all duration-300 focus-ring"
-                            aria-label="Toggle mobile menu"
-                          >
-                      {isMobileMenuOpen ? (
-                        <X className="w-6 h-6 text-foreground" />
-                      ) : (
-                        <Menu className="w-6 h-6 text-foreground" />
-                      )}
-                    </button>
+                  {/* Theme Toggle & Mobile Menu Button */}
+                  <div className="flex items-center gap-3">
+                    {/* Theme Toggle */}
+                    <ThemeToggle />
+                    
+                    {/* Mobile Menu Button */}
+                    <div className="md:hidden">
+                      <button
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                        className="p-3 rounded-lg bg-muted/90 backdrop-blur-sm border-2 border-primary/30 hover:bg-muted hover:border-primary/50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 z-50 relative"
+                        aria-label="Toggle mobile menu"
+                        type="button"
+                      >
+                        {isMobileMenuOpen ? (
+                          <X className="w-6 h-6 text-foreground" />
+                        ) : (
+                          <Menu className="w-6 h-6 text-foreground" />
+                        )}
+                      </button>
+                    </div>
                   </div>
         </div>
 
         {/* Mobile Navigation Menu */}
         <motion.div
-          initial={{ opacity: 0, height: 0 }}
+          initial={false}
           animate={{ 
             opacity: isMobileMenuOpen ? 1 : 0, 
             height: isMobileMenuOpen ? 'auto' : 0 
@@ -107,17 +135,20 @@ export default function Navigation({ currentPage = "" }: NavigationProps) {
             {navItems.map((item, index) => (
               <motion.div
                 key={item.label}
-                initial={{ opacity: 0, x: -20 }}
+                initial={false}
                 animate={{ 
                   opacity: isMobileMenuOpen ? 1 : 0, 
                   x: isMobileMenuOpen ? 0 : -20 
                 }}
-                transition={{ delay: index * 0.1, duration: 0.3 }}
+                transition={{ 
+                  delay: isMobileMenuOpen ? index * 0.1 : 0, 
+                  duration: 0.3 
+                }}
               >
                         <Link 
                           href={item.href}
                           className={`block px-6 py-4 rounded-2xl transition-all duration-500 font-medium ${
-                            currentPage === item.id 
+                            isActive(item)
                               ? 'bg-primary/10 text-primary shadow-lg' 
                               : 'text-foreground hover:bg-primary/5 hover:text-primary'
                           }`}
@@ -127,6 +158,25 @@ export default function Navigation({ currentPage = "" }: NavigationProps) {
                         </Link>
               </motion.div>
             ))}
+            
+            {/* Theme Toggle in Mobile Menu */}
+            <motion.div
+              initial={false}
+              animate={{ 
+                opacity: isMobileMenuOpen ? 1 : 0, 
+                x: isMobileMenuOpen ? 0 : -20 
+              }}
+              transition={{ 
+                delay: isMobileMenuOpen ? navItems.length * 0.1 : 0, 
+                duration: 0.3 
+              }}
+              className="px-6 py-4"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-foreground font-medium">Theme</span>
+                <ThemeToggle />
+              </div>
+            </motion.div>
           </div>
         </motion.div>
       </div>

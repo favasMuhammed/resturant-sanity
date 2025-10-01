@@ -1,0 +1,106 @@
+{
+  "tech_stack": [
+    "TypeScript",
+    "Next.js 15",
+    "React 19",
+    "Tailwind CSS 4",
+    "Sanity CMS",
+    "Framer Motion",
+    "Lucide React"
+  ],
+  "features": [
+    {
+      "name": "HomePage",
+      "description": "Main landing page with hero section, cafe information, special offers, testimonials, and gallery preview",
+      "files": [
+        "src/app/page.tsx",
+        "src/components/HomePageClient.tsx"
+      ]
+    },
+    {
+      "name": "MenuPage",
+      "description": "Complete menu display with categories, items, pricing, and special offers",
+      "files": [
+        "src/app/menu/page.tsx",
+        "src/components/MenuPageClient.tsx"
+      ]
+    },
+    {
+      "name": "GalleryPage",
+      "description": "Photo gallery with filtering capabilities and video content",
+      "files": [
+        "src/app/gallery/page.tsx",
+        "src/components/GalleryPageClient.tsx"
+      ]
+    },
+    {
+      "name": "ContactPage",
+      "description": "Contact information and form for customer inquiries",
+      "files": [
+        "src/app/contact/page.tsx"
+      ]
+    },
+    {
+      "name": "Navigation",
+      "description": "Main navigation component with responsive menu and theme toggle",
+      "files": [
+        "src/components/Navigation.tsx",
+        "src/components/ThemeToggle.tsx"
+      ]
+    },
+    {
+      "name": "Footer",
+      "description": "Site footer with contact info, social links, and additional navigation",
+      "files": [
+        "src/components/Footer.tsx"
+      ]
+    },
+    {
+      "name": "FloatingActionButton",
+      "description": "Floating action button for quick access to ordering and booking",
+      "files": [
+        "src/components/FloatingActionButton.tsx"
+      ]
+    },
+    {
+      "name": "LoadingSpinner",
+      "description": "Loading indicator component for async operations",
+      "files": [
+        "src/components/LoadingSpinner.tsx"
+      ]
+    },
+    {
+      "name": "SanityCMS",
+      "description": "Content management system integration for cafe data, menu items, gallery, and blog posts",
+      "files": [
+        "src/sanity/api.ts",
+        "src/sanity/client.ts",
+        "src/sanity/queries.ts",
+        "src/sanity/imageUtils.ts"
+      ]
+    },
+    {
+      "name": "BlogSystem",
+      "description": "Dynamic blog post system with slug-based routing",
+      "files": [
+        "src/app/[slug]/page.tsx"
+      ]
+    },
+    {
+      "name": "ErrorHandling",
+      "description": "404 error page and not found handling",
+      "files": [
+        "src/app/not-found.tsx"
+      ]
+    },
+    {
+      "name": "Layout",
+      "description": "Root layout with metadata, fonts, and global styles",
+      "files": [
+        "src/app/layout.tsx",
+        "src/app/globals.css",
+        "src/app/fonts.css"
+      ]
+    }
+  ]
+}

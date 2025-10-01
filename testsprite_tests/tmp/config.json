@@ -1,0 +1,16 @@
+{
+  "status": "commited",
+  "type": "frontend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:3000",
+  "executionArgs": {
+    "projectName": "nextjs-the-sip-in-cafe",
+    "projectPath": "D:\\aProjects\\Resturant-landing-page\\nextjs-the-sip-in-cafe",
+    "testIds": [],
+    "additionalInstruction": "FINAL COMPREHENSIVE TEST - Fix all issues for 14/14 success. Verify: 1) Blog routing /blog/[slug] works perfectly, 2) Theme toggle switches light/dark modes correctly, 3) Video playback works in gallery with proper fallbacks, 4) Navigation blog links are fully functional, 5) FAB call functionality works with tel: links, 6) All sample data displays correctly, 7) Mobile menu is completely functional, 8) All animations are smooth, 9) No hydration mismatches, 10) Loading states work properly. This must achieve 100% pass rate.",
+    "envs": {
+      "API_KEY": "sk-user-xz_edHG9iQWvMvyVNq67BCNy6MqZKcaCOgaVSmTrramHKuGcZf9IcB2Hf627YpWTkvQUA1nqUa9RDNychXxK_zeiWbKcCNcRcZS9k5p4_MIwEeLPPD7T2byF3AN6K6MgYxs"
+    }
+  },
+  "proxy": "http://a9efcae5-c3a8-478e-8ccf-f8c982ee3242:62jOwg65AuzvnOzueXUY1YxlQziYkUR1@tun.testsprite.com:8080"
+}

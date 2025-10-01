@@ -3,18 +3,19 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Star, Coffee, Heart, Users, Clock, MapPin, Phone, ShoppingCart, Calendar, ExternalLink } from "lucide-react";
+import { ArrowRight, Star, Coffee, Heart, Users, Clock, MapPin, Phone, ShoppingCart, Calendar, ExternalLink, Camera } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import FloatingActionButton from "@/components/FloatingActionButton";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { getImageUrl } from "@/sanity/imageUtils";
-import type { CafeInfo, SpecialOffer, Testimonial, BlogPost, GalleryItem } from "@/sanity/api";
+import { formatDateWithFallback } from "@/utils/dateUtils";
+import type { CafeInfo, SpecialOffer, Testimonial, GalleryItem } from "@/sanity/api";
 
 interface HomePageClientProps {
   cafeInfo: CafeInfo | null;
   specialOffers: SpecialOffer[];
   testimonials: Testimonial[];
-  blogPosts: BlogPost[];
   galleryItems: GalleryItem[];
 }
 
@@ -22,9 +23,22 @@ export default function HomePageClient({
   cafeInfo, 
   specialOffers,
   testimonials,
-  blogPosts,
   galleryItems
 }: HomePageClientProps) {
+  // Show loading state if no data is available
+  if (!cafeInfo && !specialOffers && !testimonials && !galleryItems) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <LoadingSpinner size="lg" text="Loading cafe information..." />
+      </div>
+    );
+  }
+
+  // Always use fallback data if CMS data is not available
+  const hasSpecialOffers = specialOffers && specialOffers.length > 0;
+  const hasTestimonials = testimonials && testimonials.length > 0;
+  const hasGalleryItems = galleryItems && galleryItems.length > 0;
+
   // Fallback data if Sanity data is not available
   const defaultCafeInfo = {
     name: "The Sip-In Cafe",
@@ -62,10 +76,10 @@ export default function HomePageClient({
       <div className="absolute inset-0 bg-gradient-to-br from-background via-muted to-background"></div>
       
       {/* Navigation */}
-      <Navigation currentPage="home" />
+      <Navigation currentPage="home" hasBlogPosts={false} cafeInfo={cafeInfo} />
 
       {/* Hero Section */}
-      <section id="home" className="relative min-h-screen flex items-center justify-center px-6 pt-24 md:pt-20">
+      <section id="home" className="relative min-h-screen flex items-center justify-center px-6 pt-48 md:pt-32">
         <div className="container mx-auto text-center relative z-10">
           <motion.div 
             className="max-w-6xl mx-auto"
@@ -85,18 +99,20 @@ export default function HomePageClient({
                   <div className="relative z-10">
                     {cafe.logo && cafe.logo.asset ? (
                       <Image
-                        src={getImageUrl(cafe.logo, 200, 200) || "/logo.png"}
+                        src={getImageUrl(cafe.logo, 200, 200) || "/logo-new.svg"}
                         alt={`${cafe.name} Logo`}
                         width={200}
                         height={200}
+                        priority
                         className="rounded-xl"
                       />
                     ) : (
                       <Image
-                        src="/logo.png"
+                        src="/logo-new.svg"
                         alt={`${cafe.name} Logo`}
                         width={200}
                         height={200}
+                        priority
                         className="rounded-xl"
                       />
                     )}
@@ -294,7 +310,7 @@ export default function HomePageClient({
       </section>
 
       {/* Special Offers Section */}
-      {specialOffers && specialOffers.length > 0 && (
+      {hasSpecialOffers ? (
         <section className="py-20 relative">
           <div className="container mx-auto px-6">
             <motion.div 
@@ -312,7 +328,7 @@ export default function HomePageClient({
               </p>
             </motion.div>
 
-            <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div className={`grid gap-8 max-w-6xl mx-auto ${specialOffers.length === 1 ? 'grid-cols-1 justify-center' : specialOffers.length === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 md:grid-cols-3'}`}>
               {specialOffers.slice(0, 3).map((offer, index) => (
                 <motion.div
                   key={offer._id}
@@ -347,7 +363,74 @@ export default function HomePageClient({
                       {offer.description}
                     </p>
                     <p className="text-sm text-muted-foreground/80 font-semibold">
-                      Valid until {new Date(offer.validUntil || new Date()).toLocaleDateString()}
+                      Valid until {formatDateWithFallback(offer.validUntil || new Date(), 'TBD')}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : (
+        <section className="py-20 relative">
+          <div className="container mx-auto px-6">
+            <motion.div 
+              className="text-center mb-16"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+                <span className="text-gradient">Special Offers</span>
+              </h2>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                Don&apos;t miss out on our amazing deals and discounts
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              {[
+                {
+                  title: "Happy Hour Special",
+                  description: "20% off all drinks from 3-5 PM on weekdays",
+                  type: "discount",
+                  validUntil: "2024-12-31"
+                },
+                {
+                  title: "Student Discount",
+                  description: "15% off with valid student ID",
+                  type: "student",
+                  validUntil: "2024-12-31"
+                },
+                {
+                  title: "Loyalty Rewards",
+                  description: "Earn points with every purchase and redeem for free items",
+                  type: "loyalty",
+                  validUntil: "2024-12-31"
+                }
+              ].map((offer, index) => (
+                <motion.div
+                  key={offer.title}
+                  className="bg-muted p-8 rounded-2xl shadow-2xl group-hover:shadow-3xl transition-all duration-500 h-full group"
+                  whileHover={{ y: -10, scale: 1.02 }}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1, duration: 0.6, type: "spring", stiffness: 300 }}
+                  viewport={{ once: true }}
+                >
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                      <Star className="w-8 h-8 text-primary-foreground" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors">
+                      {offer.title}
+                    </h3>
+                    <p className="text-muted-foreground mb-4 text-lg font-medium">
+                      {offer.description}
+                    </p>
+                    <p className="text-sm text-muted-foreground/80 font-semibold">
+                      Valid until {formatDateWithFallback(offer.validUntil, 'TBD')}
                     </p>
                   </div>
                 </motion.div>
@@ -358,7 +441,7 @@ export default function HomePageClient({
       )}
 
       {/* Modern Order & Booking Section */}
-      <section id="order" className="py-20 relative pt-24 md:pt-32">
+      <section id="order" className="py-16 relative pt-48 md:pt-32">
         <div className="container mx-auto px-6">
           <motion.div 
             className="text-center mb-16"
@@ -496,8 +579,8 @@ export default function HomePageClient({
       </section>
 
       {/* Testimonials Section */}
-      {testimonials && testimonials.length > 0 && (
-        <section className="py-20 relative">
+      {hasTestimonials ? (
+        <section className="py-16 relative">
           <div className="container mx-auto px-6">
             <motion.div 
               className="text-center mb-16"
@@ -545,7 +628,7 @@ export default function HomePageClient({
                         <Star
                           key={i}
                           className={`w-5 h-5 ${
-                            i < testimonial.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                            i < testimonial.rating ? 'text-yellow-400 fill-current' : 'text-muted-foreground'
                           }`}
                         />
                       ))}
@@ -572,11 +655,8 @@ export default function HomePageClient({
             </div>
           </div>
         </section>
-      )}
-
-      {/* Blog Posts Preview Section */}
-      {blogPosts && blogPosts.length > 0 && (
-        <section className="py-20 bg-muted/30">
+      ) : (
+        <section className="py-16 relative">
           <div className="container mx-auto px-6">
             <motion.div 
               className="text-center mb-16"
@@ -586,112 +666,75 @@ export default function HomePageClient({
               viewport={{ once: true }}
             >
               <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-                <span className="text-gradient">Latest News & Stories</span>
+                <span className="text-gradient">What Our Customers Say</span>
               </h2>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                Stay updated with our latest news, coffee tips, and behind-the-scenes stories
+                Hear from our happy customers about their experience at The Sip-In Cafe
               </p>
             </motion.div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              {blogPosts.slice(0, 3).map((post, index) => (
-                <motion.article
-                  key={post._id}
-                  className="bg-background rounded-2xl shadow-2xl overflow-hidden group-hover:shadow-3xl transition-all duration-500 h-full"
+              {[
+                {
+                  customerName: "Sarah Johnson",
+                  content: "The best coffee in Leicester! The atmosphere is cozy and the staff is incredibly friendly. I come here every morning before work.",
+                  rating: 5,
+                  customerLocation: "Leicester"
+                },
+                {
+                  customerName: "Mike Chen",
+                  content: "Amazing food and excellent service. The avocado toast is to die for! Highly recommend this place to anyone looking for quality breakfast.",
+                  rating: 5,
+                  customerLocation: "Leicester"
+                },
+                {
+                  customerName: "Emma Williams",
+                  content: "Perfect spot for studying or catching up with friends. The coffee is consistently great and the WiFi is reliable. Love the quiet atmosphere.",
+                  rating: 5,
+                  customerLocation: "Leicester"
+                }
+              ].map((testimonial, index) => (
+                <motion.div
+                  key={testimonial.customerName}
+                  className="bg-muted p-8 rounded-2xl shadow-2xl group-hover:shadow-3xl transition-all duration-500 h-full"
                   whileHover={{ y: -5, scale: 1.02 }}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1, duration: 0.6, type: "spring", stiffness: 300 }}
                   viewport={{ once: true }}
                 >
-                  {/* Featured Image */}
-                  {post.featuredImage && post.featuredImage.asset && (
-                    <div className="relative h-48 overflow-hidden">
-                      <Image
-                        src={getImageUrl(post.featuredImage, 400, 300) || "/blog/placeholder.jpg"}
-                        alt={post.title}
-                        width={400}
-                        height={300}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      />
-                    </div>
-                  )}
-                  
-                  <div className="p-8">
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="px-3 py-1 bg-primary/10 text-primary text-sm font-semibold rounded-full">
-                        {post.category}
-                      </span>
-                      {post.readingTime && (
-                        <span className="text-sm text-muted-foreground">
-                          {post.readingTime} min read
-                        </span>
-                      )}
+                  <div className="text-center">
+                    <div className="flex justify-center mb-4">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`w-5 h-5 ${
+                            i < testimonial.rating ? 'text-yellow-400 fill-current' : 'text-muted-foreground'
+                          }`}
+                        />
+                      ))}
                     </div>
                     
-                    <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
-                      {post.title}
-                    </h3>
+                    <p className="text-muted-foreground mb-6 italic leading-relaxed">
+                      &ldquo;{testimonial.content}&rdquo;
+                    </p>
                     
-                    {post.excerpt && (
-                      <p className="text-muted-foreground mb-4 line-clamp-3">
-                        {post.excerpt}
-                      </p>
-                    )}
-                    
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        {post.author?.photo && post.author.photo.asset && (
-                          <Image
-                            src={getImageUrl(post.author.photo, 32, 32) || "/authors/placeholder.jpg"}
-                            alt={post.author.name}
-                            width={32}
-                            height={32}
-                            className="w-8 h-8 rounded-full object-cover"
-                          />
-                        )}
-                        <div>
-                          <p className="text-sm font-semibold text-foreground">{post.author?.name || "The Sip-In Cafe"}</p>
-                          <p className="text-xs text-muted-foreground">
-                            {new Date(post.publishedAt).toLocaleDateString()}
-                          </p>
-                        </div>
-                      </div>
-                      
-                      <Link
-                        href={`/blog/${post.slug.current}`}
-                        className="text-primary hover:text-primary/80 font-semibold flex items-center space-x-1 group"
-                      >
-                        <span>Read More</span>
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                      </Link>
+                    <div className="border-t border-border pt-4">
+                      <h4 className="font-bold text-foreground mb-1">{testimonial.customerName}</h4>
+                      <p className="text-sm text-muted-foreground">{testimonial.customerLocation}</p>
                     </div>
                   </div>
-                </motion.article>
+                </motion.div>
               ))}
             </div>
-            
-            <motion.div 
-              className="text-center mt-12"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              viewport={{ once: true }}
-            >
-              <Link 
-                href="/blog" 
-                className="inline-block bg-primary text-primary-foreground px-8 py-4 rounded-xl text-lg font-semibold hover:bg-primary/90 transition-colors shadow-lg"
-              >
-                View All Posts
-              </Link>
-            </motion.div>
           </div>
         </section>
       )}
 
+
       {/* Featured Gallery Section */}
-      {galleryItems && galleryItems.length > 0 && (
-        <section className="py-20 relative">
+      {hasGalleryItems ? (
+        <section className="py-16 relative">
           <div className="container mx-auto px-6">
             <motion.div 
               className="text-center mb-16"
@@ -760,72 +803,199 @@ export default function HomePageClient({
             </motion.div>
           </div>
         </section>
+      ) : (
+        <section className="py-16 relative">
+          <div className="container mx-auto px-6">
+            <motion.div 
+              className="text-center mb-16"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+                <span className="text-gradient">Featured Moments</span>
+              </h2>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                A glimpse into our cafe life, delicious food, and happy moments
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
+              {[
+                { title: "Artisan Coffee", category: "coffee" },
+                { title: "Fresh Pastries", category: "food" },
+                { title: "Cozy Interior", category: "atmosphere" },
+                { title: "Latte Art", category: "coffee" },
+                { title: "Breakfast Platter", category: "food" },
+                { title: "Outdoor Seating", category: "atmosphere" },
+                { title: "Espresso Machine", category: "coffee" },
+                { title: "Happy Customers", category: "atmosphere" }
+              ].map((item, index) => (
+                <motion.div
+                  key={item.title}
+                  className="relative group cursor-pointer"
+                  whileHover={{ scale: 1.05 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05, duration: 0.5 }}
+                  viewport={{ once: true }}
+                >
+                  <div className="relative aspect-square overflow-hidden rounded-xl bg-gradient-to-br from-amber-100 to-orange-200 dark:from-amber-900/20 dark:to-orange-900/20 flex items-center justify-center">
+                    <div className="text-center p-4">
+                      <div className="w-12 h-12 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <Camera className="w-6 h-6 text-white" />
+                      </div>
+                      <h4 className="font-bold text-sm text-muted-foreground mb-1">{item.title}</h4>
+                      <p className="text-xs text-muted-foreground/70 capitalize">{item.category}</p>
+                    </div>
+                    
+                    {/* Overlay */}
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <div className="text-center text-white">
+                        <h4 className="font-bold text-lg mb-1">{item.title}</h4>
+                        <p className="text-sm opacity-90 capitalize">{item.category}</p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+            
+            <motion.div 
+              className="text-center mt-12"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true }}
+            >
+              <Link 
+                href="/gallery" 
+                className="inline-block bg-primary text-primary-foreground px-8 py-4 rounded-xl text-lg font-semibold hover:bg-primary/90 transition-colors shadow-lg"
+              >
+                View Full Gallery
+              </Link>
+            </motion.div>
+          </div>
+        </section>
       )}
 
       {/* Social Media */}
-      <section className="py-16 bg-muted/30">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold text-foreground mb-4">Follow Us</h2>
-          <p className="text-xl text-muted-foreground mb-12">Stay updated with our latest news, special offers, and behind-the-scenes content!</p>
-          <div className="flex flex-wrap justify-center gap-6 md:gap-8">
-            {cafe.socialMedia?.instagram && (
-              <a 
-                href={cafe.socialMedia.instagram} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="bg-gradient-to-r from-pink-500 to-purple-600 text-white p-3 md:p-4 rounded-full hover:scale-110 transition-transform"
-              >
-                <svg className="w-6 h-6 md:w-8 md:h-8" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987s11.987-5.367 11.987-11.987C24.004 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C4.198 14.895 3.708 13.744 3.708 12.447s.49-2.448 1.297-3.323c.875-.807 2.026-1.297 3.323-1.297s2.448.49 3.323 1.297c.807.875 1.297 2.026 1.297 3.323s-.49 2.448-1.297 3.323c-.875.807-2.026 1.297-3.323 1.297zm7.83-9.281h-1.531v1.531h1.531v-1.531zm-5.347 1.531c.85 0 1.531.681 1.531 1.531s-.681 1.531-1.531 1.531-1.531-.681-1.531-1.531.681-1.531 1.531-1.531zm5.347 4.347c0 .85-.681 1.531-1.531 1.531s-1.531-.681-1.531-1.531.681-1.531 1.531-1.531 1.531.681 1.531 1.531z"/>
-                </svg>
-              </a>
-            )}
-            {cafe.socialMedia?.facebook && (
-              <a 
-                href={cafe.socialMedia.facebook} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="bg-blue-600 text-white p-3 md:p-4 rounded-full hover:scale-110 transition-transform"
-              >
-                <svg className="w-6 h-6 md:w-8 md:h-8" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                </svg>
-              </a>
-            )}
-            {cafe.socialMedia?.tiktok && (
-              <a 
-                href={cafe.socialMedia.tiktok} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="bg-black text-white p-3 md:p-4 rounded-full hover:scale-110 transition-transform"
-              >
-                <svg className="w-6 h-6 md:w-8 md:h-8" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
-                </svg>
-              </a>
-            )}
+      <section className="py-20 relative">
+        <div className="container mx-auto px-6">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+              <span className="text-gradient">Follow Us</span>
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Stay updated with our latest news, special offers, and behind-the-scenes content!
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            {/* Instagram Card */}
+            <motion.div 
+              className="bg-muted p-8 rounded-2xl shadow-2xl group-hover:shadow-3xl transition-all duration-500 h-full group"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -5 }}
+            >
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-pink-500 via-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors">Instagram</h3>
+                <p className="text-muted-foreground mb-6 text-lg font-medium">
+                  Follow us for daily coffee moments and behind-the-scenes content
+                </p>
+                <motion.a
+                  href={cafeInfo?.socialMedia?.instagram || "#"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center space-x-2 text-primary hover:text-primary/80 font-semibold group"
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <span>Follow @thesipincafe</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </motion.a>
+              </div>
+            </motion.div>
+            {/* Facebook Card */}
+            <motion.div 
+              className="bg-muted p-8 rounded-2xl shadow-2xl group-hover:shadow-3xl transition-all duration-500 h-full group"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -5 }}
+            >
+              <div className="text-center">
+                <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors">Facebook</h3>
+                <p className="text-muted-foreground mb-6 text-lg font-medium">
+                  Connect with our community and stay updated on events
+                </p>
+                <motion.a
+                  href={cafeInfo?.socialMedia?.facebook || "#"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center space-x-2 text-primary hover:text-primary/80 font-semibold group"
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <span>Like our page</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </motion.a>
+              </div>
+            </motion.div>
+            {/* TikTok Card */}
+            <motion.div 
+              className="bg-muted p-8 rounded-2xl shadow-2xl group-hover:shadow-3xl transition-all duration-500 h-full group"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -5 }}
+            >
+              <div className="text-center">
+                <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors">TikTok</h3>
+                <p className="text-muted-foreground mb-6 text-lg font-medium">
+                  Watch our creative coffee content and fun moments
+                </p>
+                <motion.a
+                  href={cafeInfo?.socialMedia?.tiktok || "#"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center space-x-2 text-primary hover:text-primary/80 font-semibold group"
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <span>Follow us</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </motion.a>
+              </div>
+            </motion.div>
           </div>
-          <p className="text-muted-foreground mt-8 text-lg">
-            Stay updated with our latest news, special offers, and behind-the-scenes content!
-          </p>
         </div>
       </section>
 
-      {/* Gallery Preview */}
-      <section id="gallery" className="py-16 bg-muted/30">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold text-foreground mb-4">Gallery</h2>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Take a peek at our cozy atmosphere, delicious food, and happy customers
-          </p>
-          <Link 
-            href="/gallery" 
-            className="inline-block bg-primary text-primary-foreground px-8 py-4 rounded-xl text-lg font-semibold hover:bg-primary/90 transition-colors shadow-lg"
-          >
-            View Full Gallery
-          </Link>
-        </div>
-      </section>
 
       {/* Footer */}
       <Footer cafeInfo={cafeInfo} />

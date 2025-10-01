@@ -1,0 +1,467 @@
+[
+  {
+    "id": "TC001",
+    "title": "Home Page Loads Correctly with CMS Data",
+    "description": "Verify the Home page renders the hero section, cafe info, special offers, testimonials, and gallery preview using server-side fetched CMS data or fallback content if CMS is unavailable.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the Home page URL"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify hero section is visible with correct content from CMS or fallback"
+      },
+      {
+        "type": "assertion",
+        "description": "Check cafe information displayed matches CMS or fallback data"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm special offers section is present with accurate data"
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure testimonials are shown correctly"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify gallery preview thumbnails are displayed"
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "title": "Responsive Navigation Bar Works on Desktop and Mobile",
+    "description": "Validate navigation bar displays links, highlights the active page, toggles mobile menu correctly, and animates smoothly on different screen sizes.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Open the application on desktop viewport"
+      },
+      {
+        "type": "assertion",
+        "description": "Check navigation links display horizontally with active page highlighted"
+      },
+      {
+        "type": "action",
+        "description": "Resize viewport to mobile size"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify hamburger menu icon is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click hamburger menu icon"
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure mobile menu expands with navigation links"
+      },
+      {
+        "type": "action",
+        "description": "Click a navigation link"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm menu closes and page navigates; active link reflects current page"
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "title": "Menu Page Displays Categorized Items Accurately",
+    "description": "Verify the Menu page loads menu items grouped by categories with correct pricing, descriptions, dietary information, and special offers consistent with CMS data.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the Menu page"
+      },
+      {
+        "type": "assertion",
+        "description": "Check that menu categories are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "For each category, verify menu items are listed with name, price, description, and dietary info"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm any special offers are indicated on relevant items"
+      },
+      {
+        "type": "assertion",
+        "description": "Resize screen to mobile and ensure responsive layout adapts"
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "title": "Gallery Page Filters and Displays Media Correctly",
+    "description": "Test the Gallery page showcases images and videos in a responsive masonry grid, supports filtering by category, hover effects, and video playback functionality.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Gallery page"
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure gallery displays a masonry grid with images and videos"
+      },
+      {
+        "type": "action",
+        "description": "Use the category filters to select a category"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify gallery updates to show only items matching the selected category"
+      },
+      {
+        "type": "action",
+        "description": "Hover over gallery items"
+      },
+      {
+        "type": "assertion",
+        "description": "Check that hover effects appear as expected on the items"
+      },
+      {
+        "type": "action",
+        "description": "Play a video item in the gallery"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify video plays correctly and controls respond"
+      },
+      {
+        "type": "assertion",
+        "description": "Resize viewport to check responsive adjustments"
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "title": "Blog System Loads Posts Correctly and Handles Missing Posts",
+    "description": "Validate that the blog listing loads dynamically from CMS with SEO metadata and individual blog posts render properly. The system should gracefully handle missing or non-existent posts with a 404 page.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the Blog listing page"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm blog posts are listed with titles, previews, and metadata"
+      },
+      {
+        "type": "action",
+        "description": "Select and navigate to an individual blog post"
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure full post content is displayed with rich text formatting"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify SEO meta tags and structured data are present on the post page"
+      },
+      {
+        "type": "action",
+        "description": "Manually navigate to a non-existent blog post URL"
+      },
+      {
+        "type": "assertion",
+        "description": "Check custom 404 page appears with navigation options back to Home and Menu"
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "title": "Contact Page Displays Info and Form Responsively",
+    "description": "Check that the Contact page shows accurate contact information and includes a fully responsive contact inquiry form with proper field labels and layout adaptations across devices.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Contact page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify contact information (address, phone, email) is displayed correctly"
+      },
+      {
+        "type": "assertion",
+        "description": "Check the presence of a contact form with all required fields"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm form fields have proper labels and accessibility attributes"
+      },
+      {
+        "type": "assertion",
+        "description": "Resize viewport to mobile and verify form layout adjusts appropriately"
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "title": "Floating Action Button Functions Correctly",
+    "description": "Verify that the Floating Action Button expands and collapses smoothly with animations and that each quick action (order, call, directions) triggers the intended behavior.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Locate the Floating Action Button on any page"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm initial FAB state is collapsed and visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the FAB to expand"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify quick action buttons appear with smooth animation"
+      },
+      {
+        "type": "action",
+        "description": "Click the order quick action"
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure order action triggers the expected behavior or navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click the call quick action"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm the call action initiates a phone call or displays the phone number"
+      },
+      {
+        "type": "action",
+        "description": "Click the directions quick action"
+      },
+      {
+        "type": "assertion",
+        "description": "Validate directions action opens the map application or shows directions"
+      },
+      {
+        "type": "action",
+        "description": "Click the FAB again to collapse"
+      },
+      {
+        "type": "assertion",
+        "description": "Check that FAB returns to collapsed state with proper animation"
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "title": "Loading Spinner Displays Appropriately During Async Operations",
+    "description": "Ensure the Loading Spinner component appears during asynchronous data fetching or loading processes with correct size variations and optional custom text.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Trigger a page or component data load that uses the Loading Spinner"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the spinner is visible during the loading state"
+      },
+      {
+        "type": "assertion",
+        "description": "Check spinner size matches requested size (small, medium, large)"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm optional custom loading text is displayed if provided"
+      },
+      {
+        "type": "assertion",
+        "description": "After data load finishes, ensure spinner disappears"
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "title": "Dark/Light Theme Toggle with Persistence and Accessibility",
+    "description": "Validate the theme toggle detects system preference initially, toggles between dark and light modes, persists user choice across sessions, and includes accessibility enhancements.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Load the app with system preference set to dark mode"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify initial theme is dark"
+      },
+      {
+        "type": "action",
+        "description": "Use the theme toggle button to switch to light mode"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm theme changes to light and updates UI styles"
+      },
+      {
+        "type": "action",
+        "description": "Refresh page"
+      },
+      {
+        "type": "assertion",
+        "description": "Check that previously selected theme persists"
+      },
+      {
+        "type": "action",
+        "description": "Verify the toggle button has ARIA labels and keyboard focusable"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm toggle can be activated using keyboard only"
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "title": "SEO Meta Tags and Structured Data Present on Key Pages",
+    "description": "Confirm essential SEO elements like meta tags, Open Graph tags, and structured data are correctly included in the HTML of Home, Menu, Blog post, and Contact pages.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Home page"
+      },
+      {
+        "type": "assertion",
+        "description": "Inspect page source and verify presence of meta description, keywords, Open Graph tags, and JSON-LD structured data"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to Menu page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify meta tags and structured data are present and valid"
+      },
+      {
+        "type": "action",
+        "description": "View a Blog post page"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm SEO metadata specific to the blog post is included"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to Contact page"
+      },
+      {
+        "type": "assertion",
+        "description": "Check required SEO and social meta tags present"
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "title": "Error Boundaries and Custom 404 Page Function Correctly",
+    "description": "Test that the application gracefully handles unexpected errors with error boundaries and displays a custom 404 page for unavailable routes, including navigation back to Home and Menu pages.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to a completely non-existent route"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm custom 404 page is shown with readable message"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify navigation links back to Home and Menu are present and functional"
+      },
+      {
+        "type": "action",
+        "description": "Simulate an unexpected runtime error within a component"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the error boundary catches the error and displays a fallback UI"
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "title": "Accessibility Compliance Across Major Components",
+    "description": "Ensure all pages and interactive components comply with accessibility standards including keyboard navigation, ARIA labels, focus management, and color contrast requirements.",
+    "category": "accessibility",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Use keyboard tab navigation across all major pages and components"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm all interactive elements are reachable and actionable via keyboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify ARIA labels and roles are present and correct on all navigation and interactive elements"
+      },
+      {
+        "type": "assertion",
+        "description": "Use color contrast tool to check all text and UI elements meet WCAG contrast requirements"
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "title": "Performance Metrics Meet Target Core Web Vitals",
+    "description": "Measure and validate that the application performance meets specified Core Web Vitals thresholds (LCP < 2.5s, FID < 100ms, CLS < 0.1) on representative pages including Home, Menu, and Blog.",
+    "category": "performance",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Load the Home page under normal network conditions"
+      },
+      {
+        "type": "assertion",
+        "description": "Measure and assert LCP is less than 2.5 seconds"
+      },
+      {
+        "type": "assertion",
+        "description": "Measure FID and ensure it is below 100 milliseconds"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify CLS is below 0.1 during page load and interactions"
+      },
+      {
+        "type": "action",
+        "description": "Repeat measurements on Menu and Blog pages"
+      }
+    ]
+  }
+]

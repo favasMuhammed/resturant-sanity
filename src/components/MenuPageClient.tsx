@@ -8,20 +8,23 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import FloatingActionButton from "@/components/FloatingActionButton";
 import { getImageUrl } from "@/sanity/imageUtils";
-import type { MenuCategory, MenuItem, SpecialOffer, CafeInfo } from "@/sanity/api";
+import { formatDateWithFallback } from "@/utils/dateUtils";
+import type { MenuCategory, MenuItem, SpecialOffer, CafeInfo, BlogPost } from "@/sanity/api";
 
 interface MenuPageClientProps {
   menuCategories: MenuCategory[];
   menuItems: MenuItem[];
   specialOffers: SpecialOffer[];
   cafeInfo: CafeInfo | null;
+  blogPosts?: BlogPost[];
 }
 
 export default function MenuPageClient({ 
   menuCategories, 
   menuItems, 
   specialOffers,
-  cafeInfo
+  cafeInfo,
+  blogPosts = []
 }: MenuPageClientProps) {
   // Group menu items by category
   const groupedMenuItems = menuCategories.map(category => ({
@@ -87,10 +90,10 @@ export default function MenuPageClient({
       <div className="absolute inset-0 bg-gradient-to-br from-background via-muted to-background"></div>
 
       {/* Navigation */}
-      <Navigation currentPage="menu" />
+      <Navigation currentPage="menu" hasBlogPosts={blogPosts && blogPosts.length > 0} cafeInfo={cafeInfo} />
 
       {/* Modern Menu Header */}
-      <section className="relative py-20 px-6 pt-24 md:pt-32">
+      <section className="relative py-20 px-6 pt-48 md:pt-32">
         <div className="container mx-auto text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -100,7 +103,7 @@ export default function MenuPageClient({
             <h1 className="text-6xl md:text-7xl font-black mb-8">
               <span className="text-gradient">Our Menu</span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
               Fresh ingredients, carefully prepared. From morning coffee to afternoon treats, 
               we&apos;ve got something for everyone.
             </p>
@@ -115,14 +118,14 @@ export default function MenuPageClient({
               ].map((highlight, index) => (
                 <motion.div
                   key={highlight.text}
-                  className="flex items-center space-x-2 px-6 py-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-lg border border-white/20"
+                  className="flex items-center space-x-2 px-6 py-3 bg-muted/80 backdrop-blur-sm rounded-full shadow-lg border border-white/20"
                   whileHover={{ scale: 1.05, y: -2 }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1, duration: 0.5, type: "spring", stiffness: 300 }}
                 >
                   <highlight.icon className="w-5 h-5 text-amber-500" />
-                  <span className="text-gray-700 dark:text-gray-300 font-medium">{highlight.text}</span>
+                  <span className="text-foreground font-medium">{highlight.text}</span>
                 </motion.div>
               ))}
             </div>
@@ -156,7 +159,7 @@ export default function MenuPageClient({
               )}
               
               <motion.h2 
-                className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-12 text-center"
+                className="text-4xl md:text-5xl font-bold text-foreground mb-12 text-center"
                 whileInView={{ scale: 1.05 }}
                 transition={{ duration: 0.3 }}
                 viewport={{ once: true }}
@@ -168,7 +171,7 @@ export default function MenuPageClient({
               
               {/* Category Description */}
               {'description' in category && category.description && (
-                <p className="text-center text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
+                <p className="text-center text-muted-foreground mb-8 max-w-2xl mx-auto">
                   {category.description}
                 </p>
               )}
@@ -184,7 +187,7 @@ export default function MenuPageClient({
                     viewport={{ once: true }}
                   >
                     {/* Menu Item Image */}
-                    {'image' in item && item.image && item.image.asset && (
+                    {'image' in item && item.image && item.image.asset ? (
                       <div className="mb-4">
                         <Image
                           src={getImageUrl(item.image, 300, 200) || "/menu/placeholder.jpg"}
@@ -194,17 +197,49 @@ export default function MenuPageClient({
                           className="w-full h-48 object-cover rounded-xl"
                         />
                       </div>
+                    ) : (
+                      <div className="mb-4 h-48 bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 dark:from-amber-900/30 dark:via-orange-900/20 dark:to-yellow-900/30 rounded-xl flex items-center justify-center relative overflow-hidden group">
+                        {/* Decorative background pattern */}
+                        <div className="absolute inset-0 opacity-10">
+                          <div className="absolute top-4 left-4 w-8 h-8 bg-amber-400 rounded-full"></div>
+                          <div className="absolute top-8 right-6 w-6 h-6 bg-orange-400 rounded-full"></div>
+                          <div className="absolute bottom-6 left-8 w-4 h-4 bg-yellow-400 rounded-full"></div>
+                          <div className="absolute bottom-4 right-4 w-10 h-10 bg-amber-300 rounded-full"></div>
+                        </div>
+                        
+                        {/* Main content */}
+                        <div className="text-center relative z-10">
+                          <div className="w-20 h-20 bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+                            <Utensils className="w-10 h-10 text-white" />
+                          </div>
+                          
+                          {/* Elegant decorative elements */}
+                          <div className="flex justify-center space-x-1 mb-2">
+                            <div className="w-1 h-1 bg-amber-400 rounded-full"></div>
+                            <div className="w-1 h-1 bg-orange-400 rounded-full"></div>
+                            <div className="w-1 h-1 bg-yellow-400 rounded-full"></div>
+                          </div>
+                          
+                          {/* Subtle text hint */}
+                          <div className="text-primary text-xs font-medium tracking-wider uppercase">
+                            {item.name}
+                          </div>
+                        </div>
+                        
+                        {/* Hover overlay effect */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      </div>
                     )}
                     
                     <div className="flex justify-between items-start mb-3">
-                      <h3 className="text-xl font-bold text-gray-800 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                      <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
                         {item.name}
                       </h3>
                       <span className="text-xl font-bold text-gradient">
                         {typeof item.price === 'number' ? `£${item.price.toFixed(2)}` : item.price}
                       </span>
                     </div>
-                    <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+                    <p className="text-muted-foreground leading-relaxed mb-4">
                       {item.description}
                     </p>
                     
@@ -235,7 +270,7 @@ export default function MenuPageClient({
                   {/* Allergens */}
                   {'allergens' in item && item.allergens && item.allergens.length > 0 && (
                     <div className="mt-2">
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                      <p className="text-xs text-muted-foreground/70">
                         Contains: {item.allergens.join(', ')}
                       </p>
                     </div>
@@ -259,15 +294,15 @@ export default function MenuPageClient({
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-6">
+              <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
                 <span className="text-gradient">Special Offers</span>
               </h2>
-              <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
                 Don&apos;t miss out on our amazing deals and discounts
               </p>
             </motion.div>
 
-            <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div className={`grid gap-8 max-w-6xl mx-auto ${specialOffers.length === 1 ? 'grid-cols-1 justify-center' : specialOffers.length === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 md:grid-cols-3'}`}>
               {specialOffers.slice(0, 3).map((offer, index) => (
                 <motion.div
                   key={offer._id}
@@ -295,14 +330,14 @@ export default function MenuPageClient({
                     <div className="w-16 h-16 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                       <Percent className="w-8 h-8 text-white" />
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-4 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                    <h3 className="text-2xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors">
                       {offer.title}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-300 mb-4 text-lg font-medium">
+                    <p className="text-muted-foreground mb-4 text-lg font-medium">
                       {offer.description}
                     </p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 font-semibold">
-                      Valid until {new Date(offer.validUntil || new Date()).toLocaleDateString()}
+                    <p className="text-sm text-muted-foreground/70 font-semibold">
+                      Valid until {formatDateWithFallback(offer.validUntil || new Date(), 'TBD')}
                     </p>
                   </div>
                 </motion.div>
@@ -323,15 +358,15 @@ export default function MenuPageClient({
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-6">
+              <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
                 <span className="text-gradient">Special Offers</span>
               </h2>
-              <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
                 Don&apos;t miss out on our amazing deals and discounts
               </p>
             </motion.div>
 
-            <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
               {[
                 {
                   title: "Morning Special",
@@ -368,13 +403,13 @@ export default function MenuPageClient({
                     <div className="w-16 h-16 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                       <offer.icon className="w-8 h-8 text-white" />
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-4 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                    <h3 className="text-2xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors">
                       {offer.title}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-300 mb-4 text-lg font-medium">
+                    <p className="text-muted-foreground mb-4 text-lg font-medium">
                       {offer.description}
                     </p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 font-semibold">
+                    <p className="text-sm text-muted-foreground/70 font-semibold">
                       {offer.valid}
                     </p>
                   </div>
@@ -394,10 +429,10 @@ export default function MenuPageClient({
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
               <span className="text-gradient">Ready to Order?</span>
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
               Choose from our delivery partners or book a table to enjoy your meal in our cozy cafe.
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">

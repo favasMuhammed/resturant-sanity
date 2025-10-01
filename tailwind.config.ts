@@ -11,19 +11,19 @@ const config: Config = {
     extend: {
       // Unified Coffee Theme Color Palette
       colors: {
-        // Primary Coffee Colors - Based on Logo Specs
+        // Primary Coffee Colors - Enhanced for Bright Theme
         primary: {
           50: '#fefdfb',
           100: '#f5f5dc',
           200: '#deb887',
           300: '#d2b48c',
           400: '#cd853f',
-          500: '#3f1f01', // Logo color plate - dark brown/maroon
-          600: '#2c1810',
-          700: '#1a0f08',
-          800: '#0d0704',
-          900: '#050301',
-          950: '#020100',
+          500: '#d2691e', // Warm coffee brown for bright theme
+          600: '#b8860b',
+          700: '#8b4513',
+          800: '#654321',
+          900: '#2c1810',
+          950: '#1a0f08',
         },
         // Secondary Coffee Colors - Based on Logo Specs
         secondary: {
