@@ -34,7 +34,6 @@ export const getImageUrl = (source: SanityImageSource, width?: number, height?: 
     if (height) imageBuilder = imageBuilder.height(height)
     
     const url = imageBuilder.url()
-    console.log('Generated image URL:', url)
     return url
   } catch (error) {
     console.warn('Error generating image URL:', error, 'Source:', source)

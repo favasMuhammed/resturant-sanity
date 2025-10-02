@@ -883,7 +883,7 @@ export default function HomePageClient({
       {/* Social Media */}
       <section className="py-20 relative">
         <div className="container mx-auto px-6">
-          <motion.div 
+          <motion.div
             className="text-center mb-16"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -900,12 +900,12 @@ export default function HomePageClient({
 
           <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             {/* Instagram Card */}
-            <motion.div 
+          <motion.div 
               className="bg-muted p-8 rounded-2xl shadow-2xl group-hover:shadow-3xl transition-all duration-500 h-full group"
               initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              viewport={{ once: true }}
+            viewport={{ once: true }}
               whileHover={{ y: -5 }}
             >
               <div className="text-center">
@@ -918,16 +918,16 @@ export default function HomePageClient({
                 <p className="text-muted-foreground mb-6 text-lg font-medium">
                   Follow us for daily coffee moments and behind-the-scenes content
                 </p>
-                <motion.a
+              <motion.a 
                   href={cafeInfo?.socialMedia?.instagram || "#"}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                target="_blank" 
+                rel="noopener noreferrer"
                   className="inline-flex items-center space-x-2 text-primary hover:text-primary/80 font-semibold group"
                   whileHover={{ scale: 1.05 }}
-                >
+              >
                   <span>Follow @thesipincafe</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </motion.a>
+              </motion.a>
               </div>
             </motion.div>
             {/* Facebook Card */}
@@ -942,23 +942,23 @@ export default function HomePageClient({
               <div className="text-center">
                 <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                   <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                  </svg>
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
                 </div>
                 <h3 className="text-2xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors">Facebook</h3>
                 <p className="text-muted-foreground mb-6 text-lg font-medium">
                   Connect with our community and stay updated on events
                 </p>
-                <motion.a
+              <motion.a 
                   href={cafeInfo?.socialMedia?.facebook || "#"}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                target="_blank" 
+                rel="noopener noreferrer"
                   className="inline-flex items-center space-x-2 text-primary hover:text-primary/80 font-semibold group"
                   whileHover={{ scale: 1.05 }}
-                >
+              >
                   <span>Like our page</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </motion.a>
+              </motion.a>
               </div>
             </motion.div>
             {/* TikTok Card */}
@@ -980,7 +980,7 @@ export default function HomePageClient({
                 <p className="text-muted-foreground mb-6 text-lg font-medium">
                   Watch our creative coffee content and fun moments
                 </p>
-                <motion.a
+                <motion.a 
                   href={cafeInfo?.socialMedia?.tiktok || "#"}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -991,7 +991,7 @@ export default function HomePageClient({
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </motion.a>
               </div>
-            </motion.div>
+          </motion.div>
           </div>
         </div>
       </section>

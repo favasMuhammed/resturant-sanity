@@ -51,12 +51,27 @@ export default function Navigation({ currentPage = "", hasBlogPosts = false, caf
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <motion.div 
-            className="flex items-center space-x-4"
+            className="flex items-center space-x-3 md:space-x-4"
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
-                          <Link href="/" className="flex items-center space-x-3 group">
-                            <div className="relative">
+                          <Link href="/" className="flex items-center space-x-2 md:space-x-3 group">
+                            {/* Mobile Logo - Simplified */}
+                            <div className="md:hidden relative">
+                              <div className="p-2 bg-muted/80 backdrop-blur-sm rounded-lg shadow-md border border-primary/10">
+                                <Image
+                                  src={cafeInfo?.logo && cafeInfo.logo.asset ? getImageUrl(cafeInfo.logo, 32, 32) || "/logo-new.svg" : "/logo-new.svg"}
+                                  alt="The Sip-In Cafe Logo"
+                                  width={32}
+                                  height={32}
+                                  priority
+                                  className="rounded transition-all duration-300 group-hover:scale-105"
+                                />
+                              </div>
+                            </div>
+                            
+                            {/* Desktop Logo */}
+                            <div className="hidden md:block relative">
                               <div className="p-3 bg-muted/80 backdrop-blur-sm rounded-xl shadow-lg border border-primary/10">
                                 <Image
                                   src={cafeInfo?.logo && cafeInfo.logo.asset ? getImageUrl(cafeInfo.logo, 48, 48) || "/logo-new.svg" : "/logo-new.svg"}
@@ -68,6 +83,7 @@ export default function Navigation({ currentPage = "", hasBlogPosts = false, caf
                                 />
                               </div>
                             </div>
+                            
                             <div className="flex flex-col items-start group-hover:scale-105 transition-transform duration-300">
                               <span className="logo-name-nav">THE SIP-IN</span>
                               <span className="logo-cafe-nav">CAFE</span>
@@ -99,22 +115,29 @@ export default function Navigation({ currentPage = "", hasBlogPosts = false, caf
                   </div>
 
                   {/* Theme Toggle & Mobile Menu Button */}
-                  <div className="flex items-center gap-3">
-                    {/* Theme Toggle */}
-                    <ThemeToggle />
+                  <div className="flex items-center gap-2 md:gap-3">
+                    {/* Desktop Theme Toggle */}
+                    <div className="hidden md:block">
+                      <ThemeToggle />
+                    </div>
+                    
+                    {/* Mobile Theme Toggle - Smaller */}
+                    <div className="md:hidden">
+                      <ThemeToggle className="p-1.5" />
+                    </div>
                     
                     {/* Mobile Menu Button */}
                     <div className="md:hidden">
                       <button
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        className="p-3 rounded-lg bg-muted/90 backdrop-blur-sm border-2 border-primary/30 hover:bg-muted hover:border-primary/50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 z-50 relative"
+                        className="p-2.5 rounded-lg bg-muted/90 backdrop-blur-sm border border-primary/30 hover:bg-muted hover:border-primary/50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 z-50 relative"
                         aria-label="Toggle mobile menu"
                         type="button"
                       >
                         {isMobileMenuOpen ? (
-                          <X className="w-6 h-6 text-foreground" />
+                          <X className="w-5 h-5 text-foreground" />
                         ) : (
-                          <Menu className="w-6 h-6 text-foreground" />
+                          <Menu className="w-5 h-5 text-foreground" />
                         )}
                       </button>
                     </div>
@@ -159,7 +182,7 @@ export default function Navigation({ currentPage = "", hasBlogPosts = false, caf
               </motion.div>
             ))}
             
-            {/* Theme Toggle in Mobile Menu */}
+            {/* Theme Toggle in Mobile Menu - Text Version */}
             <motion.div
               initial={false}
               animate={{ 
@@ -172,10 +195,7 @@ export default function Navigation({ currentPage = "", hasBlogPosts = false, caf
               }}
               className="px-6 py-4"
             >
-              <div className="flex items-center justify-between">
-                <span className="text-foreground font-medium">Theme</span>
-                <ThemeToggle />
-              </div>
+              <ThemeToggle variant="text" className="w-full text-left" />
             </motion.div>
           </div>
         </motion.div>

@@ -79,7 +79,10 @@ export default function Footer({ cafeInfo }: FooterProps) {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h3 className="text-3xl md:text-4xl font-display font-bold mb-6 text-gradient">The Sip-In Cafe</h3>
+            <div className="mb-6">
+              <div className="logo-name-footer text-3xl md:text-4xl text-gradient">THE SIP-IN</div>
+              <div className="logo-cafe-footer text-lg md:text-xl">CAFE</div>
+            </div>
             <p className="text-muted-foreground mb-8 text-base md:text-lg leading-relaxed max-w-md text-body">
               Your perfect spot for coffee, food, and community in Leicester. 
               Where every sip tells a story and every visit creates memories.
@@ -214,7 +217,7 @@ export default function Footer({ cafeInfo }: FooterProps) {
           viewport={{ once: true }}
         >
           <p className="text-muted-foreground text-sm md:text-base text-center">
-            &copy; 2024 The Sip-In Cafe. All rights reserved. Made with ❤️ in Leicester.
+            &copy; 2024 <span className="logo-name-footer text-sm">THE SIP-IN</span> <span className="logo-cafe-footer text-sm">CAFE</span>. All rights reserved. Made with ❤️ in Leicester.
           </p>
         </motion.div>
       </div>

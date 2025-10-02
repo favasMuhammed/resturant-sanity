@@ -243,60 +243,63 @@ export default function GalleryPageClient({ galleryItems, cafeInfo, blogPosts = 
             </div>
           ) : (
           <motion.div 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8"
             layout
           >
               {filteredImages.map((image, index: number) => image && (
               <motion.div 
                 key={image.id} 
-                className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 bg-muted"
+                className="group relative overflow-hidden rounded-xl md:rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 bg-muted"
                 layout
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -10, scale: 1.02 }}
+                whileHover={{ y: -5, scale: 1.02 }}
               >
                 {image.type === 'video' && image.videoUrl ? (
                   // Video item
-                  <div className="aspect-square bg-gradient-to-br from-amber-100 to-orange-200 dark:from-amber-900/20 dark:to-orange-900/20 flex items-center justify-center relative">
+                  <div className="aspect-square bg-gradient-to-br from-amber-100 to-orange-200 dark:from-amber-900/20 dark:to-orange-900/20 flex items-center justify-center relative rounded-xl">
                     {image.videoThumbnail ? (
+                      <div className="relative w-full h-full">
                       <Image
                         src={image.videoThumbnail}
                         alt={image.alt}
                         width={400}
                         height={400}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="text-center p-8">
-                        <div className="w-16 h-16 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                          <Play className="w-8 h-8 text-white" />
+                          className="w-full h-full object-cover rounded-xl"
+                        />
+                        {/* Always visible play button overlay for thumbnails */}
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded-xl">
+                          <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
+                            <Play className="w-6 h-6 md:w-8 md:h-8 text-white ml-1" />
+                          </div>
                         </div>
-                        <p className="text-muted-foreground font-medium group-hover:text-primary transition-colors">
+                      </div>
+                    ) : (
+                      <div className="text-center p-4 md:p-8">
+                        <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:scale-110 transition-transform duration-300">
+                          <Play className="w-6 h-6 md:w-8 md:h-8 text-white ml-1" />
+                        </div>
+                        <p className="text-muted-foreground font-medium group-hover:text-primary transition-colors text-sm md:text-base">
                           {image.alt}
                         </p>
-                        <p className="text-sm text-muted-foreground/70 mt-2 capitalize font-semibold">
+                        <p className="text-xs md:text-sm text-muted-foreground/70 mt-1 md:mt-2 capitalize font-semibold">
                           {image.category}
                         </p>
                       </div>
                     )}
-                    <div className="absolute inset-0 bg-transparent group-hover:bg-amber-500/20 transition-all duration-300 flex items-center justify-center">
-                      <motion.button 
-                        className="opacity-0 group-hover:opacity-100 bg-background text-foreground px-6 py-3 rounded-full font-semibold transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 shadow-lg"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                    {/* Mobile-friendly click overlay */}
+                    <div 
+                      className="absolute inset-0 bg-transparent hover:bg-amber-500/10 transition-all duration-300 flex items-center justify-center cursor-pointer rounded-xl"
                         onClick={() => {
                           if (image.videoUrl) {
-                            // Try to open video in new tab, fallback to alert if it fails
                             try {
                               const newWindow = window.open(image.videoUrl, '_blank', 'noopener,noreferrer');
                               if (!newWindow) {
-                                // Fallback: try to navigate to the video URL
-                                window.location.href = image.videoUrl;
-                              }
-                             } catch {
-                              // Fallback: try to navigate to the video URL
+                              window.location.href = image.videoUrl;
+                            }
+                           } catch {
                               window.location.href = image.videoUrl;
                             }
                           } else {
@@ -304,7 +307,14 @@ export default function GalleryPageClient({ galleryItems, cafeInfo, blogPosts = 
                           }
                         }}
                       >
-                        Watch Video
+                      {/* Desktop hover button */}
+                      <motion.button 
+                        className="hidden md:flex opacity-0 group-hover:opacity-100 bg-background text-foreground px-4 py-2 md:px-6 md:py-3 rounded-full font-semibold transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 shadow-lg items-center space-x-2"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <Play className="w-4 h-4" />
+                        <span className="text-sm md:text-base">Watch Video</span>
                       </motion.button>
                     </div>
                   </div>
@@ -358,23 +368,24 @@ export default function GalleryPageClient({ galleryItems, cafeInfo, blogPosts = 
                           </p>
                         </div>
                       </div>
-                        {/* Click indicator overlay */}
+                        {/* Mobile-friendly click indicator overlay */}
                         <div className="absolute inset-0 bg-transparent group-hover:bg-amber-500/10 transition-all duration-300 rounded-xl flex items-center justify-center">
-                          <div className="opacity-0 group-hover:opacity-100 bg-background bg-opacity-90 text-foreground px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 flex items-center space-x-2">
-                            <ZoomIn className="w-4 h-4" />
-                            <span>Click to view</span>
+                          <div className="opacity-0 md:group-hover:opacity-100 bg-background bg-opacity-90 text-foreground px-2 py-1 md:px-3 md:py-2 rounded-full text-xs md:text-sm font-medium transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 flex items-center space-x-1 md:space-x-2">
+                            <ZoomIn className="w-3 h-3 md:w-4 md:h-4" />
+                            <span className="hidden sm:inline">Click to view</span>
+                            <span className="sm:hidden">View</span>
                           </div>
                         </div>
                       </div>
                     ) : (
                       <div 
-                        className="text-center p-8 relative z-10 cursor-pointer"
+                        className="text-center p-4 md:p-8 relative z-10 cursor-pointer"
                         onClick={() => {
                           // Placeholder clicked - no action needed
                         }}
                       >
-                        <div className="w-20 h-20 bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-                          <Camera className="w-10 h-10 text-white" />
+                        <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl md:rounded-2xl flex items-center justify-center mx-auto mb-2 md:mb-3 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+                          <Camera className="w-8 h-8 md:w-10 md:h-10 text-white" />
                         </div>
                         
                         {/* Elegant decorative elements */}
@@ -384,28 +395,28 @@ export default function GalleryPageClient({ galleryItems, cafeInfo, blogPosts = 
                           <div className="w-1 h-1 bg-yellow-400 rounded-full"></div>
                         </div>
                         
-                        <p className="text-primary font-medium group-hover:text-amber-700 dark:group-hover:text-amber-300 transition-colors mb-2">
+                        <p className="text-primary font-medium group-hover:text-amber-700 dark:group-hover:text-amber-300 transition-colors mb-1 md:mb-2 text-sm md:text-base">
                           {image.alt}
                         </p>
-                        <p className="text-accent text-sm font-semibold tracking-wider uppercase">
+                        <p className="text-accent text-xs md:text-sm font-semibold tracking-wider uppercase">
                           {image.category}
                         </p>
                         
                       </div>
                     )}
                     <div className="absolute inset-0 bg-transparent group-hover:bg-amber-500/20 transition-all duration-300 flex items-center justify-center">
-                      {/* Always visible zoom icon in corner */}
-                      <div className="absolute top-3 right-3 bg-background bg-opacity-90 hover:bg-opacity-100 text-foreground p-2 rounded-full shadow-lg transition-all duration-300 opacity-0 group-hover:opacity-100">
-                        <ZoomIn className="w-4 h-4" />
+                      {/* Always visible zoom icon in corner - desktop only */}
+                      <div className="hidden md:block absolute top-2 right-2 md:top-3 md:right-3 bg-background bg-opacity-90 hover:bg-opacity-100 text-foreground p-1.5 md:p-2 rounded-full shadow-lg transition-all duration-300 opacity-0 group-hover:opacity-100">
+                        <ZoomIn className="w-3 h-3 md:w-4 md:h-4" />
                       </div>
                       
-                      {/* Main button */}
+                      {/* Main button - hidden on mobile, shown on hover for desktop */}
                       <motion.button 
-                        className="opacity-0 group-hover:opacity-100 bg-background text-foreground px-6 py-3 rounded-full font-semibold transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 shadow-lg flex items-center space-x-2"
+                        className="hidden md:flex opacity-0 group-hover:opacity-100 bg-background text-foreground px-4 py-2 md:px-6 md:py-3 rounded-full font-semibold transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 shadow-lg items-center space-x-2"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={(e) => {
-                          e.stopPropagation(); // Prevent triggering the image click
+                          e.stopPropagation();
                           if (image.src && image.src !== "/gallery/placeholder.jpg") {
                             setSelectedImage({
                               src: image.src,
@@ -416,7 +427,7 @@ export default function GalleryPageClient({ galleryItems, cafeInfo, blogPosts = 
                         }}
                       >
                         <ZoomIn className="w-4 h-4" />
-                        <span>View Full Size</span>
+                        <span className="text-sm md:text-base">View Full Size</span>
                       </motion.button>
                     </div>
                   </div>
@@ -446,7 +457,7 @@ export default function GalleryPageClient({ galleryItems, cafeInfo, blogPosts = 
             </p>
           </motion.div>
           
-          <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 max-w-6xl mx-auto">
             {[
               {
                 title: "Coffee Making Process",
@@ -461,21 +472,21 @@ export default function GalleryPageClient({ galleryItems, cafeInfo, blogPosts = 
             ].map((video, index) => (
               <motion.div
                 key={video.title}
-                className="bg-gradient-to-br from-amber-100 to-orange-200 dark:from-amber-900/20 dark:to-orange-900/20 rounded-2xl p-8 aspect-video flex items-center justify-center card-modern group cursor-pointer"
-                whileHover={{ y: -10, scale: 1.02 }}
+                className="bg-gradient-to-br from-amber-100 to-orange-200 dark:from-amber-900/20 dark:to-orange-900/20 rounded-xl md:rounded-2xl p-4 md:p-8 aspect-video flex items-center justify-center card-modern group cursor-pointer"
+                whileHover={{ y: -5, scale: 1.02 }}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1, duration: 0.6, type: "spring", stiffness: 300 }}
                 viewport={{ once: true }}
               >
                 <div className="text-center">
-                  <div className="w-20 h-20 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                    <video.icon className="w-10 h-10 text-white" />
+                  <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <video.icon className="w-8 h-8 md:w-10 md:h-10 text-white ml-1" />
                   </div>
-                  <p className="text-muted-foreground font-bold text-lg group-hover:text-primary transition-colors">
+                  <p className="text-muted-foreground font-bold text-base md:text-lg group-hover:text-primary transition-colors">
                     {video.title}
                   </p>
-                  <p className="text-sm text-muted-foreground/70 mt-2 font-medium">
+                  <p className="text-xs md:text-sm text-muted-foreground/70 mt-1 md:mt-2 font-medium">
                     {video.description}
                   </p>
                 </div>

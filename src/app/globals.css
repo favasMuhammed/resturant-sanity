@@ -1,5 +1,78 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
 
+/* Custom Local Fonts - Geist and Quicksand */
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/Geist/Geist-VariableFont_wght.ttf') format('truetype-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/Geist/static/Geist-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/Geist/static/Geist-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/Geist/static/Geist-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Quicksand';
+  src: url('/fonts/Quicksand/Quicksand-VariableFont_wght.ttf') format('truetype-variations');
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Quicksand';
+  src: url('/fonts/Quicksand/static/Quicksand-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Quicksand';
+  src: url('/fonts/Quicksand/static/Quicksand-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Quicksand';
+  src: url('/fonts/Quicksand/static/Quicksand-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Quicksand';
+  src: url('/fonts/Quicksand/static/Quicksand-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @import "tailwindcss";
 
 /* Smooth scrolling support */
@@ -84,6 +157,8 @@ html[data-scroll-behavior="smooth"] {
   --font-mono: 'JetBrains Mono', monospace;
   --font-display: 'Outfit', system-ui, sans-serif;
   --font-logo: 'Prachason Neue Mono', monospace;
+  --font-geist: 'Geist', 'Inter', system-ui, sans-serif;
+  --font-quicksand: 'Quicksand', 'Outfit', system-ui, sans-serif;
   --radius: var(--radius);
 }
 
@@ -424,60 +499,85 @@ body {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-/* Responsive logo text for navigation - Enhanced for Bright Theme */
+/* Responsive logo text for navigation - Enhanced with Custom Fonts */
 .logo-name-nav {
-  font-family: 'Space Mono', 'IBM Plex Mono', 'JetBrains Mono', monospace;
+  font-family: var(--font-geist);
   font-size: 32px;
-  font-weight: 700;
+  font-weight: 800; /* Extra Bold for strong presence */
   color: var(--foreground); /* Theme-aware text color */
   line-height: 1;
   letter-spacing: -0.02em;
   text-transform: uppercase;
   text-shadow: 0 1px 2px rgba(44, 24, 16, 0.2);
+  font-feature-settings: 'kern' 1, 'liga' 1;
 }
 
 .logo-cafe-nav {
-  font-family: 'Space Mono', 'IBM Plex Mono', 'JetBrains Mono', monospace;
+  font-family: var(--font-quicksand);
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 600; /* SemiBold for elegant subtitle */
   color: var(--primary); /* Theme-aware primary color */
   line-height: 1;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.05em; /* Slightly more spacing for Quicksand */
   text-transform: uppercase;
   text-shadow: 0 1px 1px rgba(44, 24, 16, 0.1);
+  font-feature-settings: 'kern' 1, 'liga' 1;
 }
 
-/* Responsive logo text for homepage */
+/* Responsive logo text for homepage - Enhanced with Custom Fonts */
 .logo-name-home {
-  font-family: 'Space Mono', 'IBM Plex Mono', 'JetBrains Mono', monospace;
+  font-family: var(--font-geist);
   font-size: 54.2px;
-  font-weight: 700;
+  font-weight: 900; /* Black weight for maximum impact on homepage */
   color: #f5f5dc; /* Cream text */
   line-height: 1;
   letter-spacing: -0.02em;
   text-transform: uppercase;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  font-feature-settings: 'kern' 1, 'liga' 1;
 }
 
 .logo-cafe-home {
-  font-family: 'Space Mono', 'IBM Plex Mono', 'JetBrains Mono', monospace;
+  font-family: var(--font-quicksand);
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 700; /* Bold for homepage prominence */
   color: #d2b48c; /* Light brown */
   line-height: 1;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.08em; /* More spacing for homepage elegance */
   text-transform: uppercase;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  font-feature-settings: 'kern' 1, 'liga' 1;
+}
+
+/* Footer logo text styles - Enhanced with Custom Fonts */
+.logo-name-footer {
+  font-family: var(--font-geist);
+  font-weight: 800; /* Extra Bold for footer prominence */
+  color: var(--foreground);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  font-feature-settings: 'kern' 1, 'liga' 1;
+}
+
+.logo-cafe-footer {
+  font-family: var(--font-quicksand);
+  font-weight: 600; /* SemiBold for footer elegance */
+  color: var(--primary);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-feature-settings: 'kern' 1, 'liga' 1;
 }
 
 /* Mobile responsive adjustments */
 @media (max-width: 768px) {
   .logo-name-nav {
-    font-size: 24px;
+    font-size: 22px;
+    line-height: 1.1;
   }
   
   .logo-cafe-nav {
-    font-size: 10px;
+    font-size: 9px;
+    line-height: 1.2;
   }
   
   .logo-name-home {
@@ -491,11 +591,13 @@ body {
 
 @media (max-width: 480px) {
   .logo-name-nav {
-    font-size: 20px;
+    font-size: 18px;
+    line-height: 1.1;
   }
   
   .logo-cafe-nav {
     font-size: 8px;
+    line-height: 1.2;
   }
   
   .logo-name-home {

@@ -17,6 +17,22 @@ const nextConfig: NextConfig = {
       }
     ],
   },
+  experimental: {
+    // Improve React 19 compatibility
+    reactCompiler: false,
+    // Better error handling for server components
+    serverComponentsExternalPackages: ['@sanity/image-url', 'next-sanity'],
+  },
+  // Ensure proper webpack configuration
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+      };
+    }
+    return config;
+  },
 };
 
 export default nextConfig;
