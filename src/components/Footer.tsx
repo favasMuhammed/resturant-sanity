@@ -217,8 +217,9 @@ export default function Footer({ cafeInfo }: FooterProps) {
           viewport={{ once: true }}
         >
           <p className="text-muted-foreground text-sm md:text-base text-center">
-            &copy; 2025 <span className="logo-name-footer text-sm">THE SIP-IN</span> <span className="logo-cafe-footer text-sm">CAFE</span>. All rights reserved. Made with ❤️ in Leicester.
+            &copy; 2025 <span className="logo-name-footer text-sm">THE SIP-IN</span> <span className="logo-cafe-footer text-sm">CAFÉ</span>. All rights reserved. Made with ❤️ in Leicester.
           </p>
+
         </motion.div>
       </div>
     </footer>
