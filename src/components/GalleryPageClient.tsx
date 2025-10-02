@@ -297,9 +297,9 @@ export default function GalleryPageClient({ galleryItems, cafeInfo, blogPosts = 
                             try {
                               const newWindow = window.open(image.videoUrl, '_blank', 'noopener,noreferrer');
                               if (!newWindow) {
-                              window.location.href = image.videoUrl;
-                            }
-                           } catch {
+                                window.location.href = image.videoUrl;
+                              }
+                             } catch {
                               window.location.href = image.videoUrl;
                             }
                           } else {
