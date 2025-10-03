@@ -8,7 +8,7 @@ import { ArrowRight, Camera, Play, X, ZoomIn } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import FloatingActionButton from "@/components/FloatingActionButton";
-import { getImageUrl } from "@/sanity/imageUtils";
+import { getImageUrl, getHighQualityImageUrl, getMediumQualityImageUrl } from "@/sanity/imageUtils";
 import type { GalleryItem, CafeInfo, BlogPost } from "@/sanity/api";
 
 interface GalleryPageClientProps {
@@ -30,10 +30,15 @@ export default function GalleryPageClient({ galleryItems, cafeInfo, blogPosts = 
         let imageUrl = null;
         
         if (item.image && item.image.asset) {
-          // First try the standard getImageUrl function
-          imageUrl = getImageUrl(item.image, 400, 400);
+          // Use high quality for gallery images with larger dimensions
+          imageUrl = getHighQualityImageUrl(item.image, 800, 800);
           
-          // If that fails, try without size parameters
+          // If that fails, try with medium quality
+          if (!imageUrl) {
+            imageUrl = getMediumQualityImageUrl(item.image, 600, 600);
+          }
+          
+          // Final fallback
           if (!imageUrl) {
             imageUrl = getImageUrl(item.image);
           }
@@ -66,7 +71,7 @@ export default function GalleryPageClient({ galleryItems, cafeInfo, blogPosts = 
         }
         
         const videoThumbnailUrl = item.videoThumbnail && item.videoThumbnail.asset ? 
-          getImageUrl(item.videoThumbnail, 400, 400) : null;
+          getHighQualityImageUrl(item.videoThumbnail, 800, 800) : null;
         
         
         // Only return items that have valid image URLs

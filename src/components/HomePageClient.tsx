@@ -8,7 +8,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import FloatingActionButton from "@/components/FloatingActionButton";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import { getImageUrl } from "@/sanity/imageUtils";
+import { getImageUrl, getHighQualityImageUrl, getMediumQualityImageUrl } from "@/sanity/imageUtils";
 import { formatDateWithFallback } from "@/utils/dateUtils";
 import type { CafeInfo, SpecialOffer, Testimonial, GalleryItem } from "@/sanity/api";
 
@@ -99,9 +99,9 @@ export default function HomePageClient({
                   <div className="relative z-10">
                     {cafe.logo && cafe.logo.asset ? (
                       <Image
-                        src={getImageUrl(cafe.logo, 200, 200) || "/logo-new.svg"}
+                        src={getHighQualityImageUrl(cafe.logo, 300, 300) || "/logo-new.svg"}
                         alt={`${cafe.name} Logo`}
-                        width={200}
+                        width={300}
                         height={200}
                         priority
                         className="rounded-xl"
@@ -344,9 +344,9 @@ export default function HomePageClient({
                     {offer.image && offer.image.asset && (
                       <div className="mb-6">
                         <Image
-                          src={getImageUrl(offer.image, 300, 200) || "/offers/placeholder.jpg"}
+                          src={getHighQualityImageUrl(offer.image, 500, 350) || "/offers/placeholder.jpg"}
                           alt={offer.title}
-                          width={300}
+                          width={500}
                           height={200}
                           className="w-full h-48 object-cover rounded-xl mx-auto shadow-lg"
                         />
@@ -613,9 +613,9 @@ export default function HomePageClient({
                     {testimonial.customerPhoto && testimonial.customerPhoto.asset && (
                       <div className="mb-6">
                         <Image
-                          src={getImageUrl(testimonial.customerPhoto, 80, 80) || "/testimonials/placeholder.jpg"}
+                          src={getMediumQualityImageUrl(testimonial.customerPhoto, 120, 120) || "/testimonials/placeholder.jpg"}
                           alt={testimonial.customerName}
-                          width={80}
+                          width={120}
                           height={80}
                           className="w-20 h-20 rounded-full mx-auto object-cover shadow-lg"
                         />
@@ -765,9 +765,9 @@ export default function HomePageClient({
                   <div className="relative aspect-square overflow-hidden rounded-xl">
                     {item.image && item.image.asset && (
                       <Image
-                        src={getImageUrl(item.image, 300, 300) || "/gallery/placeholder.jpg"}
+                        src={getHighQualityImageUrl(item.image, 500, 500) || "/gallery/placeholder.jpg"}
                         alt={item.title}
-                        width={300}
+                        width={500}
                         height={300}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />

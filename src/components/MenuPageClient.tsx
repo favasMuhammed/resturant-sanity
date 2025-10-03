@@ -7,7 +7,7 @@ import { ArrowRight, Star, Coffee, Utensils, Clock, Percent } from "lucide-react
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import FloatingActionButton from "@/components/FloatingActionButton";
-import { getImageUrl } from "@/sanity/imageUtils";
+import { getImageUrl, getHighQualityImageUrl, getMediumQualityImageUrl } from "@/sanity/imageUtils";
 import { formatDateWithFallback } from "@/utils/dateUtils";
 import type { MenuCategory, MenuItem, SpecialOffer, CafeInfo, BlogPost } from "@/sanity/api";
 
@@ -149,9 +149,9 @@ export default function MenuPageClient({
               {'image' in category && category.image && category.image.asset && (
                 <div className="mb-8 text-center">
                   <Image
-                    src={getImageUrl(category.image, 400, 200) || "/menu/category-placeholder.jpg"}
+                    src={getHighQualityImageUrl(category.image, 600, 400) || "/menu/category-placeholder.jpg"}
                     alt={category.name}
-                    width={400}
+                    width={600}
                     height={200}
                     className="w-full max-w-2xl h-48 object-cover rounded-2xl mx-auto shadow-lg"
                   />
@@ -190,9 +190,9 @@ export default function MenuPageClient({
                     {'image' in item && item.image && item.image.asset ? (
                       <div className="mb-4">
                         <Image
-                          src={getImageUrl(item.image, 300, 200) || "/menu/placeholder.jpg"}
+                          src={getHighQualityImageUrl(item.image, 400, 300) || "/menu/placeholder.jpg"}
                           alt={item.name}
-                          width={300}
+                          width={400}
                           height={200}
                           className="w-full h-48 object-cover rounded-xl"
                         />
@@ -318,9 +318,9 @@ export default function MenuPageClient({
                     {offer.image && (
                       <div className="mb-6">
                         <Image
-                          src={getImageUrl(offer.image, 300, 200) || "/offers/placeholder.jpg"}
+                          src={getHighQualityImageUrl(offer.image, 500, 350) || "/offers/placeholder.jpg"}
                           alt={offer.title}
-                          width={300}
+                          width={500}
                           height={200}
                           className="w-full h-48 object-cover rounded-xl mx-auto shadow-lg"
                         />

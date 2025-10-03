@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { getImageUrl } from "@/sanity/imageUtils";
+import { getImageUrl, getMediumQualityImageUrl } from "@/sanity/imageUtils";
 import ThemeToggle from "./ThemeToggle";
 
 interface NavigationProps {
@@ -60,7 +60,7 @@ export default function Navigation({ currentPage = "", hasBlogPosts = false, caf
                             <div className="md:hidden relative">
                               <div className="p-2 bg-muted/80 backdrop-blur-sm rounded-lg shadow-md border border-primary/10">
                                 <Image
-                                  src={cafeInfo?.logo && cafeInfo.logo.asset ? getImageUrl(cafeInfo.logo, 32, 32) || "/logo-new.svg" : "/logo-new.svg"}
+                                  src={cafeInfo?.logo && cafeInfo.logo.asset ? getMediumQualityImageUrl(cafeInfo.logo, 64, 64) || "/logo-new.svg" : "/logo-new.svg"}
                                   alt="The Sip-In Cafe Logo"
                                   width={32}
                                   height={32}
@@ -74,7 +74,7 @@ export default function Navigation({ currentPage = "", hasBlogPosts = false, caf
                             <div className="hidden md:block relative">
                               <div className="p-3 bg-muted/80 backdrop-blur-sm rounded-xl shadow-lg border border-primary/10">
                                 <Image
-                                  src={cafeInfo?.logo && cafeInfo.logo.asset ? getImageUrl(cafeInfo.logo, 48, 48) || "/logo-new.svg" : "/logo-new.svg"}
+                                  src={cafeInfo?.logo && cafeInfo.logo.asset ? getMediumQualityImageUrl(cafeInfo.logo, 96, 96) || "/logo-new.svg" : "/logo-new.svg"}
                                   alt="The Sip-In Cafe Logo"
                                   width={48}
                                   height={48}

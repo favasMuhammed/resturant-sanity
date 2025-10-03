@@ -9,7 +9,7 @@ export const urlFor = (source: SanityImageSource) =>
     ? imageUrlBuilder({ projectId, dataset }).image(source)
     : null
 
-export const getImageUrl = (source: SanityImageSource, width?: number, height?: number) => {
+export const getImageUrl = (source: SanityImageSource, width?: number, height?: number, quality: number = 90) => {
   // Check if source is valid and has required properties
   if (!source || typeof source !== 'object') {
     console.warn('Invalid source provided to getImageUrl:', source)
@@ -33,10 +33,31 @@ export const getImageUrl = (source: SanityImageSource, width?: number, height?: 
     if (width) imageBuilder = imageBuilder.width(width)
     if (height) imageBuilder = imageBuilder.height(height)
     
+    // Add quality parameter for better image quality
+    imageBuilder = imageBuilder.quality(quality)
+    
+    // Add format optimization
+    imageBuilder = imageBuilder.format('auto')
+    
     const url = imageBuilder.url()
     return url
   } catch (error) {
     console.warn('Error generating image URL:', error, 'Source:', source)
     return null
   }
+}
+
+// High-quality image function for gallery and hero images
+export const getHighQualityImageUrl = (source: SanityImageSource, width?: number, height?: number) => {
+  return getImageUrl(source, width, height, 95) // 95% quality for high-res images
+}
+
+// Medium quality for thumbnails and cards
+export const getMediumQualityImageUrl = (source: SanityImageSource, width?: number, height?: number) => {
+  return getImageUrl(source, width, height, 85) // 85% quality for balanced size/quality
+}
+
+// Low quality for small icons and avatars
+export const getLowQualityImageUrl = (source: SanityImageSource, width?: number, height?: number) => {
+  return getImageUrl(source, width, height, 75) // 75% quality for small images
 }
