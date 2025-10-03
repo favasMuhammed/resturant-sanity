@@ -7,6 +7,10 @@ import Image from "next/image";
 import { BLOG_POST_BY_SLUG_QUERY, LEGACY_POST_BY_SLUG_QUERY, BLOG_POSTS_QUERY } from "@/sanity/queries";
 import { formatDateWithFallback } from "@/utils/dateUtils";
 import Navigation from "@/components/Navigation";
+import { generateMetadata as generatePageMetadata } from "@/lib/metadata";
+// import { generateBlogPostSchema } from "@/lib/structuredData";
+import { getCafeInfo } from "@/sanity/api";
+import type { Metadata } from "next";
 
 const { projectId, dataset } = client.config();
 const urlFor = (source: SanityImageSource) =>
@@ -16,6 +20,27 @@ const urlFor = (source: SanityImageSource) =>
 
 const options = { next: { revalidate: 30 } };
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const cafeInfo = await getCafeInfo();
+  
+  // Try to fetch the post for metadata
+  let post = await client.fetch<SanityDocument>(BLOG_POST_BY_SLUG_QUERY, { slug }, options);
+  if (!post) {
+    post = await client.fetch<SanityDocument>(LEGACY_POST_BY_SLUG_QUERY, { slug }, options);
+  }
+  
+  if (post) {
+    return generatePageMetadata(cafeInfo, post.title);
+  }
+  
+  return generatePageMetadata(cafeInfo, "Blog Post");
+}
+
 export default async function BlogPostPage({
   params,
 }: {
@@ -23,8 +48,11 @@ export default async function BlogPostPage({
 }) {
   const { slug } = await params;
   
-  // Fetch blog posts to determine if blog link should be shown
-  const blogPosts = await client.fetch(BLOG_POSTS_QUERY, {}, options);
+  // Fetch blog posts and cafe info
+  const [blogPosts, cafeInfo] = await Promise.all([
+    client.fetch(BLOG_POSTS_QUERY, {}, options),
+    getCafeInfo()
+  ]);
   
   // Try to fetch from blogPost first, then fallback to legacy post
   let post = await client.fetch<SanityDocument>(BLOG_POST_BY_SLUG_QUERY, { slug }, options);
@@ -40,7 +68,7 @@ export default async function BlogPostPage({
         <div className="absolute inset-0 bg-gradient-to-br from-background via-muted to-background"></div>
         
         {/* Navigation */}
-        <Navigation currentPage="blog" hasBlogPosts={blogPosts && blogPosts.length > 0} cafeInfo={null} />
+        <Navigation currentPage="blog" hasBlogPosts={blogPosts && blogPosts.length > 0} cafeInfo={cafeInfo} />
         
         <main className="container mx-auto min-h-screen max-w-3xl p-8 flex flex-col gap-4 relative z-10 pt-48 md:pt-32">
         <Link href="/" className="hover:underline">
@@ -67,7 +95,7 @@ export default async function BlogPostPage({
       <div className="absolute inset-0 bg-gradient-to-br from-background via-muted to-background"></div>
       
       {/* Navigation */}
-      <Navigation currentPage="blog" hasBlogPosts={blogPosts && blogPosts.length > 0} cafeInfo={null} />
+      <Navigation currentPage="blog" hasBlogPosts={blogPosts && blogPosts.length > 0} cafeInfo={cafeInfo} />
       
       <main className="container mx-auto min-h-screen max-w-3xl p-8 flex flex-col gap-4 relative z-10 pt-48 md:pt-32">
       <Link href="/" className="hover:underline">

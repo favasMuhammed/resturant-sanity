@@ -14,19 +14,19 @@ export function generateMetadata(cafeInfo: CafeInfo | null, pageTitle?: string):
   const description = cafeInfo?.seo?.metaDescription || defaultDescription;
   const keywords = cafeInfo?.seo?.keywords?.join(", ") || defaultKeywords;
 
-  // Generate Open Graph image URL
+  // Generate Open Graph image URL - use existing logo
   const ogImageUrl = cafeInfo?.seo?.ogImage 
     ? getImageUrl(cafeInfo.seo.ogImage, 1200, 630)
     : cafeInfo?.logo 
     ? getImageUrl(cafeInfo.logo, 1200, 630)
-    : "/og-image.jpg";
+    : "/logo-new.svg";
 
-  // Generate Twitter image URL
-  const twitterImageUrl = cafeInfo?.seo?.twitterImage 
-    ? getImageUrl(cafeInfo.seo.twitterImage, 1200, 600)
+  // Generate X (formerly Twitter) image URL - use existing logo
+  const xImageUrl = cafeInfo?.seo?.xImage 
+    ? getImageUrl(cafeInfo.seo.xImage, 1200, 600)
     : cafeInfo?.logo 
     ? getImageUrl(cafeInfo.logo, 1200, 600)
-    : "/twitter-image.jpg";
+    : "/logo-new.svg";
 
   return {
     title,
@@ -51,7 +51,7 @@ export function generateMetadata(cafeInfo: CafeInfo | null, pageTitle?: string):
       siteName: cafeInfo?.name || 'The Sip-In Cafe',
       images: [
         {
-          url: ogImageUrl || "/og-image.jpg",
+          url: ogImageUrl || "/logo-new.svg",
           width: 1200,
           height: 630,
           alt: `${cafeInfo?.name || "The Sip-In Cafe"} - Premium Coffee Experience`,
@@ -62,9 +62,9 @@ export function generateMetadata(cafeInfo: CafeInfo | null, pageTitle?: string):
     },
     twitter: {
       card: 'summary_large_image',
-      title: cafeInfo?.seo?.twitterTitle || title,
-      description: cafeInfo?.seo?.twitterDescription || description,
-      images: [twitterImageUrl || "/twitter-image.jpg"],
+      title: cafeInfo?.seo?.xTitle || title,
+      description: cafeInfo?.seo?.xDescription || description,
+      images: [xImageUrl || "/logo-new.svg"],
     },
     robots: {
       index: true,

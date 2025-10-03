@@ -5,12 +5,23 @@ import Image from "next/image";
 import { getImageUrl } from "@/sanity/imageUtils";
 import { formatDateWithFallback } from "@/utils/dateUtils";
 import Navigation from "@/components/Navigation";
+import { generateMetadata as generatePageMetadata } from "@/lib/metadata";
+import { getCafeInfo } from "@/sanity/api";
 import type { BlogPost } from "@/sanity/api";
+import type { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const cafeInfo = await getCafeInfo();
+  return generatePageMetadata(cafeInfo, "Blog & News");
+}
 
 const options = { next: { revalidate: 30 } };
 
 export default async function BlogPage() {
-  const blogPosts = await client.fetch<BlogPost[]>(BLOG_POSTS_QUERY, {}, options);
+  const [blogPosts, cafeInfo] = await Promise.all([
+    client.fetch<BlogPost[]>(BLOG_POSTS_QUERY, {}, options),
+    getCafeInfo()
+  ]);
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
@@ -18,7 +29,7 @@ export default async function BlogPage() {
       <div className="absolute inset-0 bg-gradient-to-br from-background via-muted to-background"></div>
       
       {/* Navigation */}
-      <Navigation currentPage="blog" hasBlogPosts={blogPosts && blogPosts.length > 0} cafeInfo={null} />
+      <Navigation currentPage="blog" hasBlogPosts={blogPosts && blogPosts.length > 0} cafeInfo={cafeInfo} />
 
       {/* Blog Header */}
       <section className="relative py-20 px-6 pt-48 md:pt-32">

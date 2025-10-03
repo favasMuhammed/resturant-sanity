@@ -60,7 +60,7 @@ export interface CafeInfo {
     instagram?: string
     facebook?: string
     tiktok?: string
-    twitter?: string
+    x?: string
   }
   deliveryPlatforms?: {
     uberEats?: string
@@ -81,9 +81,9 @@ export interface CafeInfo {
         _type: 'reference'
       }
     }
-    twitterTitle?: string
-    twitterDescription?: string
-    twitterImage?: {
+    xTitle?: string
+    xDescription?: string
+    xImage?: {
       _type: 'image'
       asset: {
         _ref: string
