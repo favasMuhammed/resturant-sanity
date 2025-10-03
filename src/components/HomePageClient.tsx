@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Star, Coffee, Heart, Users, Clock, MapPin, Phone, ShoppingCart, Calendar, ExternalLink, Camera } from "lucide-react";
+import { ArrowRight, Star, Coffee, Heart, Users, Clock, MapPin, Phone, ShoppingCart, Calendar, ExternalLink, Camera, Play } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import FloatingActionButton from "@/components/FloatingActionButton";
@@ -33,6 +33,18 @@ export default function HomePageClient({
       </div>
     );
   }
+
+  // Helper function to extract YouTube video ID
+  const getYouTubeVideoId = (url: string): string | null => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  };
+
+  // Helper function to check if URL is YouTube
+  const isYouTubeUrl = (url: string): boolean => {
+    return url.includes('youtube.com') || url.includes('youtu.be');
+  };
 
   // Always use fallback data if CMS data is not available
   const hasSpecialOffers = specialOffers && specialOffers.length > 0;
@@ -374,9 +386,9 @@ export default function HomePageClient({
                             <div className="w-1.5 h-1.5 bg-secondary rounded-full"></div>
                           </div>
                           
-             <p className="text-primary dark:text-primary/80 text-sm font-semibold">
-               {offer.title}
-             </p>
+                          <p className="text-primary dark:text-primary/80 text-sm font-semibold">
+                            {offer.title}
+                          </p>
                         </div>
                       </div>
                     )}
@@ -810,7 +822,8 @@ export default function HomePageClient({
                   viewport={{ once: true }}
                 >
                   <div className="relative aspect-square overflow-hidden rounded-xl">
-                    {item.image && item.image.asset && (
+                    {/* Show image if available */}
+                    {item.image && item.image.asset ? (
                       <Image
                         src={getHighQualityImageUrl(item.image, 500, 500) || "/gallery/placeholder.jpg"}
                         alt={item.title}
@@ -818,6 +831,57 @@ export default function HomePageClient({
                         height={300}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
+                    ) : item.type === 'video' && item.videoUrl ? (
+                      /* Show video thumbnail for videos */
+                      (() => {
+                        const isYouTube = isYouTubeUrl(item.videoUrl);
+                        const youtubeId = getYouTubeVideoId(item.videoUrl);
+                        
+                        if (isYouTube && youtubeId) {
+                          // Use YouTube thumbnail
+                          return (
+                            <Image
+                              src={`https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`}
+                              alt={item.title}
+                              width={500}
+                              height={300}
+                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            />
+                          );
+                        } else if (item.videoThumbnail && item.videoThumbnail.asset) {
+                          // Use custom video thumbnail
+                          return (
+                            <Image
+                              src={getHighQualityImageUrl(item.videoThumbnail, 500, 500) || "/gallery/placeholder.jpg"}
+                              alt={item.title}
+                              width={500}
+                              height={300}
+                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            />
+                          );
+                        } else {
+                          // Fallback to placeholder
+                          return (
+                            <div className="w-full h-full bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
+                              <Camera className="w-12 h-12 text-primary/50" />
+                            </div>
+                          );
+                        }
+                      })()
+                    ) : (
+                      /* Fallback for items without images */
+                      <div className="w-full h-full bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
+                        <Camera className="w-12 h-12 text-primary/50" />
+                      </div>
+                    )}
+                    
+                    {/* Video play icon overlay for videos */}
+                    {item.type === 'video' && item.videoUrl && (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-16 h-16 bg-black/60 rounded-full flex items-center justify-center group-hover:bg-black/80 transition-colors">
+                          <Play className="w-8 h-8 text-white ml-1" />
+                        </div>
+                      </div>
                     )}
                     
                     {/* Overlay */}

@@ -363,10 +363,10 @@ export default function MenuPageClient({
                             <div className="w-1.5 h-1.5 bg-accent rounded-full"></div>
                             <div className="w-1.5 h-1.5 bg-secondary rounded-full"></div>
                           </div>
-                          
-             <p className="text-primary dark:text-primary/80 text-sm font-semibold">
-               {offer.title}
-             </p>
+                                        
+                          <p className="text-primary dark:text-primary/80 text-sm font-semibold">
+                            {offer.title}
+                          </p>
                         </div>
                       </div>
                     )}
