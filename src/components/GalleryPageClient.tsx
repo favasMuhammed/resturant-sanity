@@ -462,23 +462,23 @@ export default function GalleryPageClient({ galleryItems, cafeInfo, blogPosts = 
 
       {/* Behind the Scenes Video Section - Only show if videos are available */}
       {videoItems.length > 0 && (
-        <section className="py-20 px-6 relative z-10">
-          <div className="container mx-auto">
-            <motion.div 
-              className="text-center mb-16"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
+      <section className="py-20 px-6 relative z-10">
+        <div className="container mx-auto">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
               <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-                <span className="text-gradient">Behind the Scenes</span>
-              </h2>
+              <span className="text-gradient">Behind the Scenes</span>
+            </h2>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                Watch our baristas in action and see what makes The Sip-In Cafe special
-              </p>
-            </motion.div>
-            
+              Watch our baristas in action and see what makes The Sip-In Cafe special
+            </p>
+          </motion.div>
+          
             <div className={`grid gap-4 md:gap-8 max-w-6xl mx-auto ${
               videoItems.length === 1 ? 'grid-cols-1 justify-center' : 
               videoItems.length === 2 ? 'grid-cols-1 md:grid-cols-2' : 
@@ -492,14 +492,14 @@ export default function GalleryPageClient({ galleryItems, cafeInfo, blogPosts = 
                 const youtubeId = video.videoUrl ? getYouTubeVideoId(video.videoUrl) : null;
                 
                 return (
-                  <motion.div
+              <motion.div
                     key={video._id}
                     className="bg-gradient-to-br from-primary/5 via-primary/10 to-accent/10 dark:from-primary/20 dark:via-primary/15 dark:to-accent/20 rounded-xl md:rounded-2xl p-4 md:p-8 aspect-video flex items-center justify-center card-modern group cursor-pointer border border-primary/20 relative overflow-hidden"
                     whileHover={{ y: -5, scale: 1.02 }}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1, duration: 0.6, type: "spring", stiffness: 300 }}
-                    viewport={{ once: true }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1, duration: 0.6, type: "spring", stiffness: 300 }}
+                viewport={{ once: true }}
                     onClick={() => {
                       if (video.videoUrl) {
                         setSelectedVideo({
@@ -534,20 +534,20 @@ export default function GalleryPageClient({ galleryItems, cafeInfo, blogPosts = 
                     <div className="text-center relative z-10">
                       <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-r from-primary to-accent rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
                         <Play className="w-8 h-8 md:w-10 md:h-10 text-white ml-1" />
-                      </div>
+                  </div>
                       <p className="text-foreground font-bold text-base md:text-lg group-hover:text-primary transition-colors">
-                        {video.title}
-                      </p>
+                    {video.title}
+                  </p>
                       <p className="text-sm text-muted-foreground/80 mt-1 md:mt-2 font-medium">
                         {video.description || "Watch this video"}
-                      </p>
-                    </div>
-                  </motion.div>
+                  </p>
+                </div>
+              </motion.div>
                 );
               })}
             </div>
-          </div>
-        </section>
+        </div>
+      </section>
       )}
 
       {/* Modern Call to Action */}

@@ -822,37 +822,29 @@ export default function HomePageClient({
                   viewport={{ once: true }}
                 >
                   <div className="relative aspect-square overflow-hidden rounded-xl">
-                    {/* Show image if available */}
-                    {item.image && item.image.asset ? (
-                      <Image
-                        src={getHighQualityImageUrl(item.image, 500, 500) || "/gallery/placeholder.jpg"}
-                        alt={item.title}
-                        width={500}
-                        height={300}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      />
-                    ) : item.type === 'video' && item.videoUrl ? (
+                    {/* Show video thumbnail first for videos, then regular image, then fallback */}
+                    {item.type === 'video' && item.videoUrl ? (
                       /* Show video thumbnail for videos */
                       (() => {
                         const isYouTube = isYouTubeUrl(item.videoUrl);
                         const youtubeId = getYouTubeVideoId(item.videoUrl);
                         
-                        if (isYouTube && youtubeId) {
-                          // Use YouTube thumbnail
+                        if (item.videoThumbnail && item.videoThumbnail.asset) {
+                          // Use custom video thumbnail first (highest priority)
                           return (
                             <Image
-                              src={`https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`}
+                              src={getHighQualityImageUrl(item.videoThumbnail, 500, 500) || "/gallery/placeholder.jpg"}
                               alt={item.title}
                               width={500}
                               height={300}
                               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                             />
                           );
-                        } else if (item.videoThumbnail && item.videoThumbnail.asset) {
-                          // Use custom video thumbnail
+                        } else if (isYouTube && youtubeId) {
+                          // Use YouTube thumbnail as fallback
                           return (
                             <Image
-                              src={getHighQualityImageUrl(item.videoThumbnail, 500, 500) || "/gallery/placeholder.jpg"}
+                              src={`https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`}
                               alt={item.title}
                               width={500}
                               height={300}
@@ -868,6 +860,15 @@ export default function HomePageClient({
                           );
                         }
                       })()
+                    ) : item.image && item.image.asset ? (
+                      /* Show regular image for non-video items */
+                      <Image
+                        src={getHighQualityImageUrl(item.image, 500, 500) || "/gallery/placeholder.jpg"}
+                        alt={item.title}
+                        width={500}
+                        height={300}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
                     ) : (
                       /* Fallback for items without images */
                       <div className="w-full h-full bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
