@@ -331,7 +331,7 @@ export default function MenuPageClient({
                 >
                   <div className="text-center">
                     {/* Special Offer Image */}
-                    {offer.image && (
+                    {offer.image && offer.image.asset ? (
                       <div className="mb-6">
                         <Image
                           src={getHighQualityImageUrl(offer.image, 500, 350) || "/offers/placeholder.jpg"}
@@ -340,6 +340,34 @@ export default function MenuPageClient({
                           height={200}
                           className="w-full h-48 object-cover rounded-xl mx-auto shadow-lg"
                         />
+                      </div>
+                    ) : (
+                      <div className="mb-6 h-48 bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 dark:from-amber-900/30 dark:via-orange-900/20 dark:to-yellow-900/30 rounded-xl flex items-center justify-center relative overflow-hidden group mx-auto shadow-lg">
+                        {/* Decorative background pattern */}
+                        <div className="absolute inset-0 opacity-10">
+                          <div className="absolute top-4 left-4 w-8 h-8 bg-amber-400 rounded-full"></div>
+                          <div className="absolute top-8 right-6 w-6 h-6 bg-orange-400 rounded-full"></div>
+                          <div className="absolute bottom-6 left-8 w-4 h-4 bg-yellow-400 rounded-full"></div>
+                          <div className="absolute bottom-4 right-4 w-10 h-10 bg-amber-300 rounded-full"></div>
+                        </div>
+                        
+                        {/* Main content */}
+                        <div className="text-center relative z-10">
+                          <div className="w-20 h-20 bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+                            <Percent className="w-10 h-10 text-white" />
+                          </div>
+                          
+                          {/* Elegant decorative elements */}
+                          <div className="flex justify-center space-x-1 mb-2">
+                            <div className="w-1 h-1 bg-amber-400 rounded-full"></div>
+                            <div className="w-1 h-1 bg-orange-400 rounded-full"></div>
+                            <div className="w-1 h-1 bg-yellow-400 rounded-full"></div>
+                          </div>
+                          
+                          <p className="text-amber-700 dark:text-amber-300 text-sm font-medium">
+                            Special Offer
+                          </p>
+                        </div>
                       </div>
                     )}
                     
