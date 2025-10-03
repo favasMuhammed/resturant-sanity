@@ -7,7 +7,7 @@ import { ArrowRight, Star, Coffee, Utensils, Clock, Percent } from "lucide-react
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import FloatingActionButton from "@/components/FloatingActionButton";
-import { getImageUrl, getHighQualityImageUrl, getMediumQualityImageUrl } from "@/sanity/imageUtils";
+import { getHighQualityImageUrl } from "@/sanity/imageUtils";
 import { formatDateWithFallback } from "@/utils/dateUtils";
 import type { MenuCategory, MenuItem, SpecialOffer, CafeInfo, BlogPost } from "@/sanity/api";
 

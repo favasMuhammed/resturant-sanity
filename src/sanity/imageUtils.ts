@@ -36,8 +36,8 @@ export const getImageUrl = (source: SanityImageSource, width?: number, height?: 
     // Add quality parameter for better image quality
     imageBuilder = imageBuilder.quality(quality)
     
-    // Add format optimization
-    imageBuilder = imageBuilder.format('auto')
+    // Add format optimization - use webp for better compression
+    imageBuilder = imageBuilder.format('webp')
     
     const url = imageBuilder.url()
     return url

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { getImageUrl, getMediumQualityImageUrl } from "@/sanity/imageUtils";
+import { getMediumQualityImageUrl } from "@/sanity/imageUtils";
 import ThemeToggle from "./ThemeToggle";
 
 interface NavigationProps {

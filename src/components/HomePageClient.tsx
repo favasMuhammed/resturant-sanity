@@ -8,7 +8,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import FloatingActionButton from "@/components/FloatingActionButton";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import { getImageUrl, getHighQualityImageUrl, getMediumQualityImageUrl } from "@/sanity/imageUtils";
+import { getHighQualityImageUrl, getMediumQualityImageUrl } from "@/sanity/imageUtils";
 import { formatDateWithFallback } from "@/utils/dateUtils";
 import type { CafeInfo, SpecialOffer, Testimonial, GalleryItem } from "@/sanity/api";
 
