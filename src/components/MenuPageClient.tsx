@@ -267,6 +267,22 @@ export default function MenuPageClient({
                     )}
                   </div>
 
+                  {/* Preparation Time and Calories */}
+                  <div className="flex items-center gap-4 mt-3 text-sm text-muted-foreground">
+                    {'preparationTime' in item && item.preparationTime && (
+                      <div className="flex items-center gap-1">
+                        <Clock className="w-4 h-4 text-primary" />
+                        <span>{item.preparationTime} min</span>
+                      </div>
+                    )}
+                    {'calories' in item && item.calories && (
+                      <div className="flex items-center gap-1">
+                        <span className="text-primary font-medium">{item.calories}</span>
+                        <span>cal</span>
+                      </div>
+                    )}
+                  </div>
+
                   {/* Allergens */}
                   {'allergens' in item && item.allergens && item.allergens.length > 0 && (
                     <div className="mt-2">
