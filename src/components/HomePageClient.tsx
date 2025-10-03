@@ -374,9 +374,9 @@ export default function HomePageClient({
                             <div className="w-1.5 h-1.5 bg-secondary rounded-full"></div>
                           </div>
                           
-                          <p className="text-primary dark:text-primary/80 text-sm font-semibold">
-                            Special Offer
-                          </p>
+             <p className="text-primary dark:text-primary/80 text-sm font-semibold">
+               {offer.title}
+             </p>
                         </div>
                       </div>
                     )}
