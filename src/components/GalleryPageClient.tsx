@@ -20,9 +20,22 @@ interface GalleryPageClientProps {
 export default function GalleryPageClient({ galleryItems, cafeInfo, blogPosts = [] }: GalleryPageClientProps) {
   const [activeFilter, setActiveFilter] = useState("all");
   const [selectedImage, setSelectedImage] = useState<{ src: string; alt: string; category: string } | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState<{ url: string; title: string; description: string } | null>(null);
 
   // Filter videos from gallery items
   const videoItems = galleryItems.filter(item => item.type === 'video' && item.videoUrl);
+
+  // Helper function to extract YouTube video ID
+  const getYouTubeVideoId = (url: string): string | null => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  };
+
+  // Helper function to check if URL is YouTube
+  const isYouTubeUrl = (url: string): boolean => {
+    return url.includes('youtube.com') || url.includes('youtu.be');
+  };
 
 
 
@@ -475,6 +488,9 @@ export default function GalleryPageClient({ galleryItems, cafeInfo, blogPosts = 
                 const videoThumbnailUrl = video.videoThumbnail && video.videoThumbnail.asset ? 
                   getHighQualityImageUrl(video.videoThumbnail, 600, 400) : null;
                 
+                const isYouTube = video.videoUrl ? isYouTubeUrl(video.videoUrl) : false;
+                const youtubeId = video.videoUrl ? getYouTubeVideoId(video.videoUrl) : null;
+                
                 return (
                   <motion.div
                     key={video._id}
@@ -486,19 +502,16 @@ export default function GalleryPageClient({ galleryItems, cafeInfo, blogPosts = 
                     viewport={{ once: true }}
                     onClick={() => {
                       if (video.videoUrl) {
-                        try {
-                          const newWindow = window.open(video.videoUrl, '_blank', 'noopener,noreferrer');
-                          if (!newWindow) {
-                            window.location.href = video.videoUrl;
-                          }
-                        } catch {
-                          window.location.href = video.videoUrl;
-                        }
+                        setSelectedVideo({
+                          url: video.videoUrl,
+                          title: video.title,
+                          description: video.description || "Watch this video"
+                        });
                       }
                     }}
                   >
                     {/* Video Thumbnail Background */}
-                    {videoThumbnailUrl && (
+                    {videoThumbnailUrl ? (
                       <div className="absolute inset-0 opacity-20">
                         <Image
                           src={videoThumbnailUrl}
@@ -507,7 +520,16 @@ export default function GalleryPageClient({ galleryItems, cafeInfo, blogPosts = 
                           className="object-cover"
                         />
                       </div>
-                    )}
+                    ) : isYouTube && youtubeId ? (
+                      <div className="absolute inset-0 opacity-20">
+                        <Image
+                          src={`https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`}
+                          alt={video.title}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    ) : null}
                     
                     <div className="text-center relative z-10">
                       <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-r from-primary to-accent rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
@@ -653,6 +675,63 @@ export default function GalleryPageClient({ galleryItems, cafeInfo, blogPosts = 
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6">
                   <h3 className="text-white text-xl font-bold mb-2">{selectedImage.alt}</h3>
                   <p className="text-muted-foreground text-sm capitalize">{selectedImage.category}</p>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Video Modal */}
+      <AnimatePresence>
+        {selectedVideo && (
+          <motion.div
+            className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedVideo(null)}
+          >
+            <motion.div
+              className="relative max-w-6xl max-h-[90vh] w-full"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setSelectedVideo(null)}
+                className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors z-10"
+              >
+                <X className="w-8 h-8" />
+              </button>
+              <div className="relative">
+                {isYouTubeUrl(selectedVideo.url) ? (
+                  <div className="relative w-full aspect-video rounded-lg overflow-hidden shadow-2xl">
+                    <iframe
+                      src={`https://www.youtube.com/embed/${getYouTubeVideoId(selectedVideo.url)}?autoplay=1&rel=0&modestbranding=1`}
+                      title={selectedVideo.title}
+                      className="absolute inset-0 w-full h-full"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                ) : (
+                  <div className="relative w-full aspect-video rounded-lg overflow-hidden shadow-2xl bg-black flex items-center justify-center">
+                    <video
+                      src={selectedVideo.url}
+                      controls
+                      autoPlay
+                      className="w-full h-full"
+                    >
+                      Your browser does not support the video tag.
+                    </video>
+                  </div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-lg pointer-events-none" />
+                <div className="absolute bottom-4 left-4 text-white pointer-events-none">
+                  <p className="text-lg font-semibold">{selectedVideo.title}</p>
+                  <p className="text-sm opacity-90">{selectedVideo.description}</p>
                 </div>
               </div>
             </motion.div>
