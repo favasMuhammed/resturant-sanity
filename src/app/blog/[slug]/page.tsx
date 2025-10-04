@@ -70,7 +70,7 @@ export default async function BlogPostPage({
         {/* Navigation */}
         <Navigation currentPage="blog" hasBlogPosts={blogPosts && blogPosts.length > 0} cafeInfo={cafeInfo} />
         
-        <main className="container mx-auto min-h-screen max-w-4xl px-6 py-12 relative z-10">
+        <main className="container mx-auto min-h-screen max-w-4xl px-6 pt-32 pb-12 relative z-10">
           {/* Back Navigation */}
           <div className="mb-8">
             <Link 
@@ -133,7 +133,7 @@ export default async function BlogPostPage({
       {/* Navigation */}
       <Navigation currentPage="blog" hasBlogPosts={blogPosts && blogPosts.length > 0} cafeInfo={cafeInfo} />
       
-      <main className="container mx-auto min-h-screen max-w-4xl px-6 py-12 relative z-10">
+      <main className="container mx-auto min-h-screen max-w-4xl px-6 pt-32 pb-12 relative z-10">
         {/* Back Navigation */}
         <div className="mb-8">
           <Link 
