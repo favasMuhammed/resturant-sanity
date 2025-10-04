@@ -45,65 +45,76 @@ export default async function BlogPage() {
         </div>
       </section>
 
-      <main className="container mx-auto max-w-6xl p-8 relative z-10">
+      <main className="container mx-auto max-w-7xl px-6 py-12 relative z-10">
 
       {blogPosts && blogPosts.length > 0 ? (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
           {blogPosts.map((post) => (
             <article
               key={post._id}
-              className="bg-background rounded-2xl shadow-2xl overflow-hidden group-hover:shadow-3xl transition-all duration-500 h-full"
+              className="bg-background/80 backdrop-blur-sm border border-border/50 rounded-2xl shadow-xl hover:shadow-2xl overflow-hidden group transition-all duration-500 h-full flex flex-col"
             >
               {post.featuredImage && post.featuredImage.asset && (
-                <div className="relative h-48 overflow-hidden">
+                <div className="relative h-56 overflow-hidden">
                   <Image
-                    src={getImageUrl(post.featuredImage, 400, 300) || "/blog/placeholder.jpg"}
+                    src={getImageUrl(post.featuredImage, 600, 400) || "/blog/placeholder.jpg"}
                     alt={post.title}
-                    width={400}
-                    height={300}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    width={600}
+                    height={400}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
               )}
               
-              <div className="p-8">
+              <div className="p-6 flex flex-col flex-grow">
                 <div className="flex items-center justify-between mb-4">
-                  <span className="px-3 py-1 bg-primary/10 text-primary text-sm font-semibold rounded-full">
+                  <span className="px-3 py-1.5 bg-primary/10 text-primary text-sm font-semibold rounded-full border border-primary/20">
                     {post.category}
                   </span>
                   {post.readingTime && (
-                    <span className="text-sm text-muted-foreground">
-                      {post.readingTime} min read
+                    <span className="text-sm text-muted-foreground flex items-center gap-1">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      {post.readingTime} min
                     </span>
                   )}
                 </div>
                 
-                <h2 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
+                <h2 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors leading-tight">
                   {post.title}
                 </h2>
                 
                 {post.excerpt && (
-                  <p className="text-muted-foreground mb-4 line-clamp-3">
+                  <p className="text-muted-foreground mb-6 line-clamp-3 leading-relaxed flex-grow">
                     {post.excerpt}
                   </p>
                 )}
                 
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div>
-                      <p className="text-sm font-semibold text-foreground">{post.author?.name || "The Sip-In Cafe"}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {formatDateWithFallback(post.publishedAt, 'TBD')}
-                      </p>
+                <div className="mt-auto">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center">
+                        <span className="text-white text-sm font-bold">
+                          {(post.author?.name || "The Sip-In Cafe").charAt(0)}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-foreground">{post.author?.name || "The Sip-In Cafe"}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {formatDateWithFallback(post.publishedAt, 'TBD')}
+                        </p>
+                      </div>
                     </div>
                   </div>
                   
                   <Link
                     href={`/blog/${post.slug.current}`}
-                    className="text-primary hover:text-primary/80 font-semibold flex items-center space-x-1 group"
+                    className="inline-flex items-center justify-center w-full px-4 py-3 bg-gradient-to-r from-primary to-accent text-white font-semibold rounded-xl hover:from-primary/90 hover:to-accent/90 transition-all duration-300 group"
                   >
-                    <span>Read More</span>
-                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <span>Read Article</span>
+                    <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                   </Link>

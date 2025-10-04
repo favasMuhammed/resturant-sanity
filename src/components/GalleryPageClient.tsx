@@ -545,7 +545,7 @@ export default function GalleryPageClient({ galleryItems, cafeInfo, blogPosts = 
               </motion.div>
                 );
               })}
-            </div>
+          </div>
         </div>
       </section>
       )}

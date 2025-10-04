@@ -832,13 +832,13 @@ export default function HomePageClient({
                         if (item.videoThumbnail && item.videoThumbnail.asset) {
                           // Use custom video thumbnail first (highest priority)
                           return (
-                            <Image
+                      <Image
                               src={getHighQualityImageUrl(item.videoThumbnail, 500, 500) || "/gallery/placeholder.jpg"}
-                              alt={item.title}
+                        alt={item.title}
                               width={500}
-                              height={300}
-                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                            />
+                        height={300}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
                           );
                         } else if (isYouTube && youtubeId) {
                           // Use YouTube thumbnail as fallback
