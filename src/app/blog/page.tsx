@@ -38,7 +38,7 @@ export default async function BlogPage() {
             <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
               Blog & News
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Stay updated with our latest news, coffee tips, and behind-the-scenes stories from The Sip-In Cafe.
             </p>
           </div>
@@ -48,11 +48,11 @@ export default async function BlogPage() {
       <main className="container mx-auto max-w-7xl px-6 py-12 relative z-10">
 
       {blogPosts && blogPosts.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 justify-items-center">
           {blogPosts.map((post) => (
             <article
               key={post._id}
-              className="bg-background/80 backdrop-blur-sm border border-border/50 rounded-2xl shadow-xl hover:shadow-2xl overflow-hidden group transition-all duration-500 h-full flex flex-col"
+              className="bg-background/80 backdrop-blur-sm border border-border/50 rounded-2xl shadow-xl hover:shadow-2xl overflow-hidden group transition-all duration-500 h-full flex flex-col w-full max-w-sm"
             >
               {post.featuredImage && post.featuredImage.asset && (
                 <div className="relative h-56 overflow-hidden">
@@ -95,11 +95,23 @@ export default async function BlogPage() {
                 <div className="mt-auto">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center">
-                        <span className="text-white text-sm font-bold">
-                          {(post.author?.name || "The Sip-In Cafe").charAt(0)}
-                        </span>
-                      </div>
+                      {post.author?.photo && post.author.photo.asset ? (
+                        <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                          <Image
+                            src={getImageUrl(post.author.photo, 32, 32) || ""}
+                            alt={post.author.name}
+                            width={32}
+                            height={32}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      ) : (
+                        <div className="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center flex-shrink-0">
+                          <span className="text-white text-sm font-bold">
+                            {(post.author?.name || "The Sip-In Cafe").charAt(0)}
+                          </span>
+                        </div>
+                      )}
                       <div>
                         <p className="text-sm font-semibold text-foreground">{post.author?.name || "The Sip-In Cafe"}</p>
                         <p className="text-xs text-muted-foreground">

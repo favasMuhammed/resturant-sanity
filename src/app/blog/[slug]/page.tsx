@@ -189,15 +189,27 @@ export default async function BlogPostPage({
             {/* Author Info */}
             {post.author && (
               <div className="flex items-center gap-4 mb-8 p-4 bg-muted/50 rounded-xl">
-                <div className="w-12 h-12 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center">
-                  <span className="text-white text-lg font-bold">
-                    {post.author.name.charAt(0)}
-                  </span>
-                </div>
+                {post.author.photo && post.author.photo.asset ? (
+                  <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+                    <Image
+                      src={urlFor(post.author.photo)?.width(48).height(48).url() || ""}
+                      alt={post.author.name}
+                      width={48}
+                      height={48}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="w-12 h-12 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-white text-lg font-bold">
+                      {post.author.name.charAt(0)}
+                    </span>
+                  </div>
+                )}
                 <div>
                   <p className="font-semibold text-foreground">{post.author.name}</p>
                   {post.author.role && (
-                    <p className="text-sm text-muted-foreground">{post.author.role}</p>
+                    <p className="text-sm text-muted-foreground capitalize">{post.author.role}</p>
                   )}
                 </div>
               </div>
