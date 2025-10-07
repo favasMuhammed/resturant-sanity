@@ -113,10 +113,10 @@ export default async function BlogPostPage({
                 className="inline-flex items-center justify-center px-6 py-3 border border-border text-foreground font-semibold rounded-xl hover:bg-muted transition-colors"
               >
                 Go Home
-              </Link>
+        </Link>
             </div>
-          </div>
-        </main>
+        </div>
+      </main>
       </div>
     );
   }
@@ -144,16 +144,16 @@ export default async function BlogPostPage({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
             Back to Blog
-          </Link>
+      </Link>
         </div>
 
         {/* Article Header */}
         <article className="bg-background/80 backdrop-blur-sm border border-border/50 rounded-2xl shadow-xl overflow-hidden">
-          {postImageUrl && (
+      {postImageUrl && (
             <div className="relative h-64 md:h-80 overflow-hidden">
-              <Image
-                src={postImageUrl}
-                alt={post.title}
+        <Image
+          src={postImageUrl}
+          alt={post.title}
                 className="w-full h-full object-cover"
                 width={800}
                 height={400}
@@ -217,12 +217,12 @@ export default async function BlogPostPage({
 
             {/* Article Content */}
             <div className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-a:text-primary prose-strong:text-foreground prose-ul:text-muted-foreground prose-ol:text-muted-foreground prose-li:text-muted-foreground">
-              {Array.isArray(post.content) && <PortableText value={post.content} />}
-              {Array.isArray(post.body) && <PortableText value={post.body} />}
-            </div>
+        {Array.isArray(post.content) && <PortableText value={post.content} />}
+        {Array.isArray(post.body) && <PortableText value={post.body} />}
+      </div>
           </div>
         </article>
-      </main>
+    </main>
     </div>
   );
 }
