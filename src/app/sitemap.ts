@@ -1,6 +1,8 @@
 import { MetadataRoute } from 'next'
 import { getBlogPosts } from '@/sanity/api'
 
+export const dynamic = 'force-static'
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://thesipincafe.co.uk'
   

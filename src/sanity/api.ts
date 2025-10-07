@@ -294,10 +294,32 @@ export interface BlogPost {
   }
 }
 
+export interface ContactSubmission {
+  _id?: string
+  _type: 'contactSubmission'
+  firstName: string
+  lastName: string
+  email: string
+  subject: string
+  message: string
+  submittedAt: string
+  ipAddress?: string
+  userAgent?: string
+  turnstileToken?: string
+  isProcessed?: boolean
+  processedAt?: string
+  notes?: string
+}
+
 // Helper function for consistent fetch options
 const fetchOptions = {
   next: { revalidate: 60 },
-  timeout: 5000
+  timeout: 10000, // Increased timeout for CORS handling
+  // Add CORS-friendly headers
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+  }
 }
 
 // API Functions
@@ -305,6 +327,16 @@ export async function getCafeInfo(): Promise<CafeInfo | null> {
   try {
     return await client.fetch(CAFE_INFO_QUERY, {}, fetchOptions)
   } catch (error) {
+    // Handle CORS errors gracefully
+    if (error instanceof Error && (error.message?.includes('CORS') || error.message?.includes('blocked by CORS policy'))) {
+      console.warn('CORS error: Sanity API blocked by browser policy. Using fallback data.')
+      return null
+    }
+    // Handle authentication errors gracefully
+    if (error instanceof Error && (error.message?.includes('Unauthorized') || error.message?.includes('401'))) {
+      console.warn('Sanity API requires authentication. Please set SANITY_TOKEN environment variable.')
+      return null
+    }
     console.error('Error fetching cafe info:', error)
     return null
   }
@@ -481,6 +513,18 @@ export async function getLegacyPostBySlug(slug: string): Promise<{
     return await client.fetch(LEGACY_POST_BY_SLUG_QUERY, { slug }, fetchOptions)
   } catch (error) {
     console.error('Error fetching legacy post by slug:', error)
+    return null
+  }
+}
+
+// Save contact submission to Sanity CMS
+export async function saveContactSubmission(submission: Omit<ContactSubmission, '_id'>): Promise<ContactSubmission | null> {
+  try {
+    const result = await client.create(submission)
+    console.log('Contact submission saved to Sanity:', result._id)
+    return result as ContactSubmission
+  } catch (error) {
+    console.error('Error saving contact submission to Sanity:', error)
     return null
   }
 }

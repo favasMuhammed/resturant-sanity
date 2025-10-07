@@ -1,5 +1,0 @@
-[33m0eea667[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m fix: update footer copyright year to 2025
-[33m0d6c893[m feat: implement custom Geist and Quicksand fonts for restaurant branding
-[33mfc841f8[m feat: enhance theme system and improve page spacing
-[33m02aa171[m Add deployment verification and deployment guide - Ready for production deployment
-[33m33f5cc0[m Fix image handling: Make category and menu item images optional with proper null checks and error handling

@@ -594,7 +594,7 @@ export default function GalleryPageClient({ galleryItems, cafeInfo, blogPosts = 
       <Footer cafeInfo={cafeInfo} />
 
       {/* Floating Action Button */}
-      <FloatingActionButton />
+      <FloatingActionButton phoneNumber={cafeInfo?.contact?.phone} />
 
       {/* Full Size Image Viewer Modal */}
       <AnimatePresence>

@@ -527,7 +527,7 @@ export default function MenuPageClient({
       <Footer cafeInfo={cafeInfo} />
 
       {/* Floating Action Button */}
-      <FloatingActionButton />
+      <FloatingActionButton phoneNumber={cafeInfo?.contact?.phone} />
     </div>
   );
 }

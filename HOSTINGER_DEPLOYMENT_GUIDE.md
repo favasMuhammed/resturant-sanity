@@ -1,195 +1,270 @@
-# 🚀 Hostinger Deployment Guide for The Sip-In Cafe
+# 🚀 Hostinger Deployment Guide - The Sip-In Cafe
 
-## 📋 Prerequisites
-- ✅ Next.js project configured for static export
-- ✅ Hostinger account with domain: sipincafe.co.uk
-- ✅ Access to Hostinger hPanel
-- ✅ Node.js and npm installed locally
+## 📋 Overview
 
-## 🔧 Configuration Changes Made
+This guide will help you deploy your Next.js cafe website to Hostinger using static hosting. The project is already configured for static export.
 
-### 1. Next.js Configuration (`next.config.ts`)
-```typescript
-const nextConfig: NextConfig = {
-  // Enable static export for Hostinger
-  output: 'export',
-  trailingSlash: true,
-  skipTrailingSlashRedirect: true,
-  distDir: 'dist',
-  
-  images: {
-    // Disable image optimization for static export
-    unoptimized: true,
-    // ... rest of config
-  },
-};
+## ✅ Pre-Deployment Checklist
+
+### **Current Configuration Status:**
+- ✅ `output: 'export'` enabled in `next.config.ts`
+- ✅ `trailingSlash: true` for proper routing
+- ✅ `unoptimized: true` for static images
+- ✅ Sanity CDN patterns configured
+- ✅ Static export ready
+
+## 🛠️ Step 1: Build the Project
+
+### **1.1 Install Dependencies**
+```bash
+cd nextjs-the-sip-in-cafe
+npm install
 ```
 
-## 🚀 Deployment Steps
-
-### Step 1: Build the Static Export
+### **1.2 Build for Production**
 ```bash
-# Run the deployment script
-node deploy-hostinger.js
-
-# Or manually:
 npm run build
 ```
 
-### Step 2: Access Hostinger hPanel
-1. Go to: https://hpanel.hostinger.com/websites/sipincafe.co.uk
-2. Login with your Hostinger credentials
-3. Navigate to **File Manager**
+This will create an `out` folder with all static files ready for Hostinger.
 
-### Step 3: Upload Files to Hostinger
-1. **Navigate to public_html directory**
-   - Path: `/public_html/`
-   - URL: https://srv708-files.hstgr.io/0cded92fed994b9a/files/public_html/
+### **1.3 Verify Build Output**
+```bash
+# Check if 'out' folder was created
+ls -la out/
 
-2. **Clear existing files** (backup first if needed)
-   - Delete all files in public_html
-   - Keep the directory structure clean
+# You should see:
+# - index.html
+# - _next/ (static assets)
+# - blog/ (blog pages)
+# - menu/ (menu page)
+# - gallery/ (gallery page)
+# - contact/ (contact page)
+```
 
-3. **Upload dist contents**
-   - Upload ALL files from `./dist/` folder
-   - Upload to `/public_html/` directory
-   - Maintain folder structure
+## 🌐 Step 2: Hostinger Setup
 
-### Step 4: Set Proper Permissions
-- **Files**: 644 permissions
-- **Directories**: 755 permissions
-- **Main files**: index.html, _next/, etc.
+### **2.1 Access Hostinger Control Panel**
+1. Login to your Hostinger account
+2. Go to **File Manager** or **hPanel**
+3. Navigate to your domain's `public_html` folder
 
-### Step 5: Domain Configuration
-1. **DNS Settings** (if needed)
-   - Ensure domain points to Hostinger servers
-   - Check A records and CNAME records
-
-2. **SSL Certificate**
-   - Enable SSL in Hostinger hPanel
-   - Force HTTPS redirect
-
-## 📁 File Structure After Upload
+### **2.2 Upload Files**
+1. **Delete existing files** in `public_html` (if any)
+2. **Upload the entire `out` folder contents** to `public_html`
+3. **Extract/Unzip** if needed
+4. **Ensure structure looks like:**
 ```
 public_html/
 ├── index.html
 ├── _next/
-│   ├── static/
-│   └── ...
 ├── blog/
-│   ├── index.html
-│   └── [slug]/
+   ├── menu/
 ├── gallery/
-├── menu/
 ├── contact/
-├── robots.txt
-├── sitemap.xml
-└── ... (all other static files)
+   └── [other static files]
+   ```
+
+## 🔧 Step 3: Configure Hostinger Settings
+
+### **3.1 Enable Gzip Compression**
+1. Go to **Advanced** → **Gzip Compression**
+2. Enable Gzip compression for better performance
+
+### **3.2 Set Up Redirects (Optional)**
+Create `.htaccess` file in `public_html`:
+```apache
+# Enable Gzip compression
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+</IfModule>
+
+# Cache static assets
+<IfModule mod_expires.c>
+    ExpiresActive on
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+</IfModule>
+
+# Security headers
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-Frame-Options DENY
+    Header always set X-XSS-Protection "1; mode=block"
+</IfModule>
 ```
 
-## 🔍 Verification Steps
+### **3.3 SSL Certificate**
+1. Go to **SSL** section in Hostinger
+2. Enable **Let's Encrypt SSL** (free)
+3. Force HTTPS redirect
 
-### 1. Test Main Pages
-- ✅ Homepage: https://sipincafe.co.uk/
-- ✅ Blog: https://sipincafe.co.uk/blog/
-- ✅ Gallery: https://sipincafe.co.uk/gallery/
-- ✅ Menu: https://sipincafe.co.uk/menu/
-- ✅ Contact: https://sipincafe.co.uk/contact/
+## 🎯 Step 4: Domain Configuration
 
-### 2. Test Dynamic Routes
-- ✅ Blog posts: https://sipincafe.co.uk/blog/[slug]/
-- ✅ Individual pages: https://sipincafe.co.uk/[slug]/
+### **4.1 Point Domain to Hostinger**
+1. Update your domain's DNS settings:
+   - **A Record**: Point to Hostinger's IP
+   - **CNAME**: Point www to your domain
+2. Wait for DNS propagation (up to 24 hours)
 
-### 3. Test Assets
-- ✅ Images loading correctly
-- ✅ CSS/JS files loading
-- ✅ Fonts loading
-- ✅ Sanity CMS integration working
+### **4.2 Custom Domain Setup**
+1. In Hostinger, go to **Domains**
+2. Add your custom domain
+3. Configure DNS settings as needed
 
-## 🛠️ Troubleshooting
+## 🚀 Step 5: Deploy and Test
 
-### Common Issues:
+### **5.1 Upload Process**
+```bash
+# Method 1: File Manager (Recommended)
+1. Zip the 'out' folder contents
+2. Upload to public_html via File Manager
+3. Extract files
 
-#### 1. 404 Errors on Refresh
-**Problem**: Dynamic routes return 404 when refreshed
-**Solution**: 
-- Ensure all routes are properly exported
-- Check that trailing slashes are configured
-- Verify file structure in public_html
+# Method 2: FTP/SFTP
+1. Use FileZilla or similar FTP client
+2. Connect to your Hostinger account
+3. Upload 'out' folder contents to public_html
+```
 
-#### 2. Images Not Loading
-**Problem**: Sanity images not displaying
-**Solution**:
-- Check Sanity project ID: `cw4sy9ik`
-- Verify image URLs are accessible
-- Check CORS settings in Sanity
+### **5.2 Test Your Website**
+1. Visit your domain: `https://yourdomain.com`
+2. Test all pages:
+   - Homepage: `/`
+   - Menu: `/menu`
+   - Gallery: `/gallery`
+   - Contact: `/contact`
+   - Blog: `/blog`
+3. Check mobile responsiveness
+4. Test all interactive elements
 
-#### 3. CSS/JS Not Loading
-**Problem**: Styling broken or JavaScript not working
-**Solution**:
-- Check file permissions (644 for files)
-- Verify _next folder is uploaded correctly
-- Clear browser cache
+## 🔄 Step 6: Update Process
 
-#### 4. Domain Not Working
-**Problem**: Site not accessible via domain
-**Solution**:
-- Check DNS propagation
-- Verify domain configuration in Hostinger
-- Check SSL certificate status
+### **6.1 Making Changes**
+```bash
+# 1. Make your changes to the code
+# 2. Rebuild the project
+npm run build
 
-## 📊 Performance Optimization
+# 3. Upload new 'out' folder contents to Hostinger
+# 4. Replace old files with new ones
+```
 
-### 1. Enable Compression
-- Enable GZIP compression in Hostinger
+### **6.2 Automated Deployment (Optional)**
+Create a deployment script:
+```bash
+#!/bin/bash
+# deploy.sh
+echo "Building project..."
+npm run build
+
+echo "Uploading to Hostinger..."
+# Use rsync or FTP to upload
+rsync -avz --delete out/ user@yourdomain.com:public_html/
+
+echo "Deployment complete!"
+```
+
+## 📊 Step 7: Performance Optimization
+
+### **7.1 Enable Caching**
+- Set up browser caching in Hostinger
+- Configure CDN if available
 - Optimize images before upload
-- Minify CSS/JS files
 
-### 2. Caching Headers
-- Set appropriate cache headers
-- Use CDN if available in Hostinger
-
-### 3. Monitor Performance
+### **7.2 Monitor Performance**
 - Use Google PageSpeed Insights
-- Monitor Core Web Vitals
-- Check mobile responsiveness
+- Check Core Web Vitals
+- Monitor with Google Analytics
 
-## 🔄 Update Process
+## 🛡️ Step 8: Security & Maintenance
 
-### For Future Updates:
-1. Make changes to the codebase
-2. Run `npm run build`
-3. Upload new `dist` contents to Hostinger
-4. Clear any caches
-5. Test the updated site
+### **8.1 Security Headers**
+The `.htaccess` file above includes basic security headers.
+
+### **8.2 Regular Updates**
+- Keep your local development environment updated
+- Rebuild and redeploy when making changes
+- Monitor for any issues
+
+## 🆘 Troubleshooting
+
+### **Common Issues:**
+
+**1. 404 Errors on Refresh**
+- Ensure `trailingSlash: true` in `next.config.ts`
+- Check that all routes are properly built
+
+**2. Images Not Loading**
+- Verify Sanity CDN configuration
+- Check image URLs in browser dev tools
+
+**3. Styling Issues**
+- Clear browser cache
+- Check if all CSS files are uploaded
+- Verify Tailwind CSS is properly built
+
+**4. Blog Posts Not Showing**
+- Check Sanity connection
+- Verify API endpoints are accessible
+- Check browser console for errors
+
+### **Debug Steps:**
+1. Check browser console for errors
+2. Verify all files are uploaded correctly
+3. Test with different browsers
+4. Check mobile responsiveness
 
 ## 📞 Support
 
-### Hostinger Support:
-- 📧 Email: support@hostinger.com
-- 💬 Live Chat: Available in hPanel
-- 📚 Documentation: https://support.hostinger.com
+### **Hostinger Support:**
+- Live chat available 24/7
+- Knowledge base with tutorials
+- Community forum
 
-### Project Support:
-- 🔧 Technical issues: Check console errors
-- 🐛 Bugs: Review browser developer tools
-- 📝 Documentation: Refer to project README
+### **Project-Specific Issues:**
+- Check the project's GitHub issues
+- Review Next.js documentation
+- Check Sanity CMS documentation
 
-## ✅ Success Checklist
+## 🎉 Success Checklist
 
-- [ ] Static export built successfully
-- [ ] All files uploaded to public_html
-- [ ] Permissions set correctly
-- [ ] Domain accessible
-- [ ] SSL certificate active
-- [ ] All pages loading correctly
-- [ ] Images and assets working
+- [ ] Project builds successfully (`npm run build`)
+- [ ] `out` folder contains all necessary files
+- [ ] Files uploaded to Hostinger `public_html`
+- [ ] Domain points to Hostinger
+- [ ] SSL certificate enabled
+- [ ] Website loads correctly
+- [ ] All pages work (home, menu, gallery, contact, blog)
 - [ ] Mobile responsive
-- [ ] SEO elements working
-- [ ] Analytics tracking (if configured)
+- [ ] Images load properly
+- [ ] No console errors
+
+## 🚀 Quick Deploy Commands
+
+```bash
+# Complete deployment process
+cd nextjs-the-sip-in-cafe
+npm install
+npm run build
+# Upload 'out' folder contents to Hostinger public_html
+```
 
 ---
 
-**🎉 Your The Sip-In Cafe website is now live on Hostinger!**
+**Your dark luxury cafe website is now ready for Hostinger! ☕️✨**
 
-**🌐 Live URL**: https://sipincafe.co.uk
+*For any issues, check the troubleshooting section or contact Hostinger support.*

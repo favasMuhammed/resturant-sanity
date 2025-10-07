@@ -4,7 +4,11 @@ import { useState } from 'react';
 import { ShoppingCart, Phone, MapPin, X } from 'lucide-react';
 import Link from 'next/link';
 
-export default function FloatingActionButton() {
+interface FloatingActionButtonProps {
+  phoneNumber?: string;
+}
+
+export default function FloatingActionButton({ phoneNumber = '01161234567' }: FloatingActionButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const actions = [
@@ -17,7 +21,7 @@ export default function FloatingActionButton() {
     {
       icon: Phone,
       label: 'Call Us',
-      href: 'tel:01161234567',
+      href: `tel:${phoneNumber}`,
       color: 'bg-primary hover:bg-primary/90 shadow-lg hover:shadow-xl'
     },
     {

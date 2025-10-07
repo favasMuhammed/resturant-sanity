@@ -1113,7 +1113,7 @@ export default function HomePageClient({
       <Footer cafeInfo={cafeInfo} />
 
       {/* Floating Action Button */}
-      <FloatingActionButton />
+      <FloatingActionButton phoneNumber={cafeInfo?.contact?.phone} />
     </div>
   );
 }
