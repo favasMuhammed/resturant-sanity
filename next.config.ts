@@ -1,7 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Enable static export for Hostinger
+  output: 'export',
+  trailingSlash: true,
+  skipTrailingSlashRedirect: true,
+  
   images: {
+    // Disable image optimization for static export
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
